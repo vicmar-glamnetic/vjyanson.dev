@@ -6,10 +6,14 @@ import { HiMail, HiPhone, HiLocationMarker, HiCheckCircle } from "react-icons/hi
 import { FaLinkedinIn, FaWhatsapp } from "react-icons/fa6";
 
 const INFO = [
-  { icon: HiMail,           label: "Email",    value: "vicmar.yanson@gmail.com",  href: "mailto:vicmar.yanson@gmail.com" },
-  { icon: HiPhone,          label: "Phone",    value: "+63 919 614 7785",          href: "tel:+639196147785"              },
-  { icon: HiLocationMarker, label: "Location", value: "Bacolod City, Philippines", href: null                            },
+  { icon: HiMail,           label: "Email",    value: "contact@vjyanson.com",      href: "mailto:contact@vjyanson.com" },
+  { icon: HiPhone,          label: "Phone",    value: "+63 919 614 7785",           href: "tel:+639196147785"           },
+  { icon: HiLocationMarker, label: "Location", value: "Bacolod City, Philippines",  href: null                         },
 ];
+
+// Paste your Formspree endpoint here after signing up at formspree.io
+// e.g. "https://formspree.io/f/xpzgkllj"
+const FORMSPREE_ENDPOINT = "";
 
 export default function Contact() {
   const ref    = useRef(null);
@@ -22,12 +26,29 @@ export default function Contact() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // Mailto fallback — swap for fetch("https://formspree.io/f/YOUR_ID", ...) when ready
-    window.location.href = `mailto:vicmar.yanson@gmail.com?subject=Portfolio Inquiry from ${encodeURIComponent(form.name)}&body=${encodeURIComponent(
-      `Hi Vicmar,\n\n${form.message}\n\n— ${form.name}\n${form.email}`
-    )}`;
-    setLoading(false);
-    setSubmitted(true);
+
+    if (FORMSPREE_ENDPOINT) {
+      // Formspree — sends directly to contact@vjyanson.com, no email client needed
+      const res = await fetch(FORMSPREE_ENDPOINT, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body:    JSON.stringify({ name: form.name, email: form.email, message: form.message }),
+      });
+      setLoading(false);
+      if (res.ok) {
+        setSubmitted(true);
+        setForm({ name: "", email: "", message: "" });
+      } else {
+        alert("Something went wrong. Please email contact@vjyanson.com directly.");
+      }
+    } else {
+      // Fallback until Formspree is set up
+      window.location.href = `mailto:contact@vjyanson.com?subject=Portfolio Inquiry from ${encodeURIComponent(form.name)}&body=${encodeURIComponent(
+        `Hi Vicmar,\n\n${form.message}\n\n— ${form.name}\n${form.email}`
+      )}`;
+      setLoading(false);
+      setSubmitted(true);
+    }
   };
 
   return (
@@ -96,7 +117,7 @@ export default function Contact() {
               <div className="flex gap-3">
                 {[
                   { icon: FaWhatsapp,   label: "WhatsApp", color: "#25d366", href: "https://wa.me/639196147785" },
-                  { icon: FaLinkedinIn, label: "LinkedIn", color: "#0a66c2", href: "#" },
+                  { icon: FaLinkedinIn, label: "LinkedIn", color: "#0a66c2", href: "https://www.linkedin.com/in/vicmar-yanson/" },
                 ].map((s) => (
                   <a
                     key={s.label}
