@@ -6,7 +6,7 @@ import { HiMail, HiPhone, HiLocationMarker, HiCheckCircle } from "react-icons/hi
 import { FaLinkedinIn, FaWhatsapp } from "react-icons/fa6";
 
 const INFO = [
-  { icon: HiMail,           label: "Email",    value: "contact@vjyanson.com",      href: "mailto:contact@vjyanson.com" },
+  { icon: HiMail,           label: "Email",    value: "vicmar.yanson@gmail.com",   href: "mailto:vicmar.yanson@gmail.com" },
   { icon: HiPhone,          label: "Phone",    value: "+63 919 614 7785",           href: "tel:+639196147785"           },
   { icon: HiLocationMarker, label: "Location", value: "Bacolod City, Philippines",  href: null                         },
 ];

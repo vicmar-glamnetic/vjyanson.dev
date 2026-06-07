@@ -28,7 +28,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 $name  = str_replace(["\r", "\n"], '', $name);
 $email = str_replace(["\r", "\n"], '', $email);
 
-$to      = 'contact@vjyanson.com';
+$to      = 'vicmar.yanson@gmail.com';
 $subject = "Portfolio Inquiry from $name";
 $body    = "New inquiry from your portfolio site.\n\n"
          . "Name:    $name\n"
