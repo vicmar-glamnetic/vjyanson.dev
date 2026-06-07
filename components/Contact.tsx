@@ -11,8 +11,7 @@ const INFO = [
   { icon: HiLocationMarker, label: "Location", value: "Bacolod City, Philippines",  href: null                         },
 ];
 
-// PHP handler on the same Namecheap server — no external service needed
-const FORMSPREE_ENDPOINT = "/contact.php";
+const FORMSPREE_ENDPOINT = "/api/contact";
 
 export default function Contact() {
   const ref    = useRef(null);
