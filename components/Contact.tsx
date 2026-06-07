@@ -63,7 +63,7 @@ export default function Contact() {
           className="mb-16"
         >
           <span className="text-xs font-bold tracking-[0.2em] text-(--cyan) uppercase">
-            04 — Contact
+            05 — Contact
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-2">
             Let&apos;s <span className="gradient-text">Work Together</span>

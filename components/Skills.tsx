@@ -88,7 +88,7 @@ export default function Skills() {
           className="mb-16"
         >
           <span className="text-xs font-bold tracking-[0.2em] text-(--purple) uppercase">
-            03 — Skills
+            04 — Skills
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-2">
             Technical{" "}
