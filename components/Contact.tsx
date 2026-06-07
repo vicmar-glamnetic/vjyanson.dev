@@ -11,9 +11,8 @@ const INFO = [
   { icon: HiLocationMarker, label: "Location", value: "Bacolod City, Philippines",  href: null                         },
 ];
 
-// Paste your Formspree endpoint here after signing up at formspree.io
-// e.g. "https://formspree.io/f/xpzgkllj"
-const FORMSPREE_ENDPOINT = "";
+// PHP handler on the same Namecheap server — no external service needed
+const FORMSPREE_ENDPOINT = "/contact.php";
 
 export default function Contact() {
   const ref    = useRef(null);
