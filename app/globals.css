@@ -1,83 +1,61 @@
 @import "tailwindcss";
 
-:root {
-  --bg: #050505;
-  --purple: #7c3aed;
-  --purple-light: #a855f7;
-  --purple-glow: rgba(124, 58, 237, 0.3);
-  --cyan: #06b6d4;
-  --muted: #94a3b8;
-  --shopify: #95bf47;
+@theme {
+  --color-paper: #ffffff;
+  --color-canvas: #f7f7f5;
+  --color-ink: #1c1c1c;
+  --color-ink-2: #4f4f4f;
+  --color-ink-3: #7a7a7a;
+  --color-line: #e3e3e0;
+  --color-line-strong: #cfcfca;
+
+  --color-brand: #008060;
+  --color-brand-dark: #004c3f;
+  --color-brand-tint: #eef6f2;
+  --color-lime: #95bf47;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-code), ui-monospace, "SF Mono", monospace;
 }
 
-@theme inline {
-  --color-background: var(--bg);
-  --color-foreground: #f1f5f9;
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html {
+  scroll-behavior: smooth;
+  /* Nav is 57px; keep anchored sections clear of it. */
+  scroll-padding-top: 5rem;
 }
-
-html { scroll-behavior: smooth; }
 
 body {
-  background: var(--bg);
-  color: #f1f5f9;
-  overflow-x: hidden;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: #0a0a0a; }
-::-webkit-scrollbar-thumb { background: var(--purple); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--purple-light); }
-
-.gradient-text {
-  background: linear-gradient(135deg, #a855f7 0%, #06b6d4 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+::selection {
+  background: #cfe7dd;
+  color: var(--color-brand-dark);
 }
 
-.glass-card {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.07);
-  transition: border-color 0.3s, background 0.3s;
+/* Reveal-on-scroll: elements start shifted, Reveal.tsx adds .is-in */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.glass-card:hover {
-  border-color: rgba(124, 58, 237, 0.25);
-  background: rgba(124, 58, 237, 0.04);
-}
-
-.grid-bg {
-  background-image:
-    linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-  background-size: 60px 60px;
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
 }
 
-@keyframes gradientShift {
-  0%, 100% { background-position: 0% 50%; }
-  50%       { background-position: 100% 50%; }
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
-.animated-border {
-  background: linear-gradient(90deg, #7c3aed, #06b6d4, #95bf47, #7c3aed);
-  background-size: 300% 300%;
-  animation: gradientShift 4s ease infinite;
-}
-
-@keyframes pulseGlow {
-  0%, 100% { opacity: 0.4; }
-  50%       { opacity: 0.9; }
-}
-.pulse-glow { animation: pulseGlow 3s ease-in-out infinite; }
-
-@keyframes floatY {
-  0%, 100% { transform: translateY(0px); }
-  50%       { transform: translateY(-18px); }
-}
-.float { animation: floatY 6s ease-in-out infinite; }
-
-@keyframes spinCW  { to { transform: rotate(360deg);  } }
-@keyframes spinCCW { to { transform: rotate(-360deg); } }
-.spin-slow     { animation: spinCW  20s linear infinite; }
-.spin-slow-rev { animation: spinCCW 15s linear infinite; }

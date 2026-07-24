@@ -1,359 +1,159 @@
-"use client";
+import Reveal from "./Reveal";
 
-import { useEffect, useRef, useState } from "react";
-import { motion, useMotionValue, useSpring, useTransform, useInView } from "framer-motion";
-import { HiArrowDown, HiMail } from "react-icons/hi";
-import { SiShopify } from "react-icons/si";
-
-/* ─── Typewriter ─── */
-const ROLES = [
-  "Senior Shopify Developer",
-  "E-Commerce Expert",
-  "Liquid Templating Wizard",
-  "Frontend Engineer",
-  "Shopify Plus Specialist",
+const FACTS = [
+  { value: "2018", label: "Building for the web since" },
+  { value: "30", label: "Live sites shipped" },
+  { value: "3", label: "Countries worked for" },
 ];
 
-function TypeWriter() {
-  const [roleIdx,   setRoleIdx]   = useState(0);
-  const [displayed, setDisplayed] = useState("");
-  const [deleting,  setDeleting]  = useState(false);
-
-  useEffect(() => {
-    const current = ROLES[roleIdx];
-    const speed   = deleting ? 45 : 75;
-    const timer   = setTimeout(() => {
-      if (!deleting) {
-        const next = current.slice(0, displayed.length + 1);
-        setDisplayed(next);
-        if (next === current) setTimeout(() => setDeleting(true), 2400);
-      } else {
-        const next = current.slice(0, displayed.length - 1);
-        setDisplayed(next);
-        if (next === "") {
-          setDeleting(false);
-          setRoleIdx((i) => (i + 1) % ROLES.length);
-        }
-      }
-    }, speed);
-    return () => clearTimeout(timer);
-  }, [displayed, deleting, roleIdx]);
-
-  return (
-    <span className="gradient-text">
-      {displayed}
-      <span className="text-(--purple) animate-pulse">|</span>
-    </span>
-  );
-}
-
-/* ─── Count-up stat ─── */
-function CountStat({ target, suffix }: { target: number; suffix: string }) {
-  const ref    = useRef(null);
-  const inView = useInView(ref, { once: true });
-  const spring = useSpring(0, { stiffness: 70, damping: 20 });
-  const [display, setDisplay] = useState(0);
-
-  useEffect(() => {
-    if (inView) spring.set(target);
-  }, [inView, target, spring]);
-
-  useEffect(() => spring.on("change", (v) => setDisplay(Math.round(v))), [spring]);
-
-  return (
-    <span ref={ref}>
-      {display}{suffix}
-    </span>
-  );
-}
-
-/* ─── Magnetic Button ─── */
-function MagneticBtn({ children, href }: { children: React.ReactNode; href: string }) {
-  const ref = useRef<HTMLAnchorElement>(null);
-  const x   = useSpring(0, { stiffness: 250, damping: 28 });
-  const y   = useSpring(0, { stiffness: 250, damping: 28 });
-
-  const onMove = (e: React.MouseEvent) => {
-    if (!ref.current) return;
-    const r  = ref.current.getBoundingClientRect();
-    x.set((e.clientX - (r.left + r.width  / 2)) * 0.3);
-    y.set((e.clientY - (r.top  + r.height / 2)) * 0.3);
-  };
-  const onLeave = () => { x.set(0); y.set(0); };
-
-  return (
-    <motion.a
-      ref={ref}
-      href={href}
-      style={{ x, y }}
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-      className="animated-border p-0.5 rounded-full inline-flex group"
-    >
-      <span className="flex items-center gap-2 px-8 py-3 bg-[#050505] rounded-full font-semibold text-white group-hover:bg-transparent transition-colors">
-        {children}
-      </span>
-    </motion.a>
-  );
-}
-
-/* ─── Particles ─── */
-const PARTICLES = [
-  { x: 8,  y: 18, s: 5,  d: 0   },
-  { x: 88, y: 12, s: 4,  d: 1   },
-  { x: 72, y: 65, s: 7,  d: 0.5 },
-  { x: 18, y: 72, s: 4,  d: 2   },
-  { x: 52, y: 88, s: 5,  d: 1.5 },
-  { x: 92, y: 78, s: 6,  d: 3   },
-  { x: 33, y: 42, s: 3,  d: 0.8 },
-  { x: 62, y: 28, s: 5,  d: 2.5 },
-  { x: 14, y: 55, s: 4,  d: 1.2 },
-  { x: 78, y: 48, s: 6,  d: 0.3 },
-  { x: 44, y: 10, s: 3,  d: 1.8 },
-  { x: 25, y: 95, s: 5,  d: 0.6 },
-];
-
-/* ─── Hero ─── */
-export default function Hero() {
-  // Mouse parallax values
-  const mouseX = useMotionValue(0.5);
-  const mouseY = useMotionValue(0.5);
-
-  const orb1X = useTransform(mouseX, [0, 1], [-30, 30]);
-  const orb1Y = useTransform(mouseY, [0, 1], [-30, 30]);
-  const orb2X = useTransform(mouseX, [0, 1], [20, -20]);
-  const orb2Y = useTransform(mouseY, [0, 1], [15, -15]);
-
-  const smoothOrb1X = useSpring(orb1X, { stiffness: 40, damping: 20 });
-  const smoothOrb1Y = useSpring(orb1Y, { stiffness: 40, damping: 20 });
-  const smoothOrb2X = useSpring(orb2X, { stiffness: 30, damping: 18 });
-  const smoothOrb2Y = useSpring(orb2Y, { stiffness: 30, damping: 18 });
-
-  const onMouseMove = (e: React.MouseEvent<HTMLElement>) => {
-    const { width, height, left, top } = e.currentTarget.getBoundingClientRect();
-    mouseX.set((e.clientX - left) / width);
-    mouseY.set((e.clientY - top)  / height);
+/* A trimmed-down version of a swatch section I've built more than once. */
+function LiquidSample() {
+  const c = {
+    tag: "text-[#79c0ff]",
+    obj: "text-[#d2a8ff]",
+    str: "text-[#a5d6ff]",
+    dim: "text-[#8b949e]",
+    el: "text-[#7ee787]",
   };
 
-  const STATS = [
-    { val: 6,   suf: "+", label: "Years Experience"   },
-    { val: 5,   suf: "+", label: "Companies"          },
-    { val: 50,  suf: "+", label: "Projects Delivered" },
-    { val: 3,   suf: "",  label: "Countries Served"   },
-  ];
-
   return (
-    <section
-      id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden grid-bg"
-      onMouseMove={onMouseMove}
-    >
-      {/* ── Morphing blobs ── */}
-      <div className="pointer-events-none absolute inset-0">
-        <motion.div
-          className="absolute top-1/4 left-1/4 w-130 h-130 rounded-full bg-purple-700/10 blur-[110px]"
-          style={{ x: smoothOrb1X, y: smoothOrb1Y }}
-          animate={{
-            borderRadius: [
-              "60% 40% 30% 70% / 60% 30% 70% 40%",
-              "30% 60% 70% 40% / 50% 60% 30% 60%",
-              "60% 40% 30% 70% / 60% 30% 70% 40%",
-            ],
-            scale: [1, 1.08, 1],
-          }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 right-1/4 w-95 h-95 rounded-full bg-cyan-500/8 blur-[90px]"
-          style={{ x: smoothOrb2X, y: smoothOrb2Y }}
-          animate={{
-            borderRadius: [
-              "40% 60% 60% 40% / 40% 40% 60% 60%",
-              "60% 40% 40% 60% / 60% 60% 40% 40%",
-              "40% 60% 60% 40% / 40% 40% 60% 60%",
-            ],
-            scale: [1, 1.1, 1],
-          }}
-          transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        />
+    <div className="overflow-hidden rounded-lg border border-line-strong bg-ink">
+      <div className="flex items-center gap-2 border-b border-white/10 px-4 py-2.5">
+        <span className="h-2 w-2 rounded-full bg-lime" />
+        <span className="font-mono text-[11.5px] text-white/55">
+          sections/product-swatches.liquid
+        </span>
       </div>
 
-      {/* ── Floating particles ── */}
-      {PARTICLES.map((p, i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full pointer-events-none"
-          style={{
-            left:       `${p.x}%`,
-            top:        `${p.y}%`,
-            width:       p.s,
-            height:      p.s,
-            background: "radial-gradient(circle, rgba(124,58,237,0.75), transparent)",
-          }}
-          animate={{
-            y:       [0, -26, 0],
-            opacity: [0.3, 0.85, 0.3],
-            scale:   [1, 1.4, 1],
-          }}
-          transition={{ duration: 4 + p.d, repeat: Infinity, delay: p.d, ease: "easeInOut" }}
-        />
-      ))}
+      <pre className="overflow-x-auto px-4 py-4 font-mono text-[11.5px] leading-[1.75] text-white/85">
+        <code>
+          <span className={c.tag}>{"{%- liquid"}</span>
+          {"\n  "}
+          <span className={c.tag}>assign</span> swatches ={" "}
+          <span className={c.obj}>product.metafields.custom.swatches.value</span>
+          {"\n  "}
+          <span className={c.tag}>assign</span> current ={" "}
+          <span className={c.obj}>
+            product.selected_or_first_available_variant
+          </span>
+          {"\n"}
+          <span className={c.tag}>{"-%}"}</span>
+          {"\n\n"}
+          <span className={c.dim}>{"<"}</span>
+          <span className={c.el}>product-swatches</span>{" "}
+          <span className={c.dim}>data-section</span>=
+          <span className={c.str}>{'"{{ section.id }}"'}</span>
+          <span className={c.dim}>{">"}</span>
+          {"\n  "}
+          <span className={c.tag}>{"{%- for swatch in swatches -%}"}</span>
+          {"\n    "}
+          <span className={c.tag}>{"{%- render"}</span>{" "}
+          <span className={c.str}>&apos;swatch-node&apos;</span>, swatch: swatch,
+          current: current <span className={c.tag}>{"-%}"}</span>
+          {"\n  "}
+          <span className={c.tag}>{"{%- endfor -%}"}</span>
+          {"\n"}
+          <span className={c.dim}>{"</"}</span>
+          <span className={c.el}>product-swatches</span>
+          <span className={c.dim}>{">"}</span>
+        </code>
+      </pre>
+    </div>
+  );
+}
 
-      {/* ── Orbit rings ── */}
-      <motion.div
-        className="absolute top-24 right-24 w-28 h-28 rounded-full border border-purple-500/20 hidden lg:block"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 22, repeat: Infinity, ease: "linear" }}
-      >
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-purple-500 shadow-[0_0_8px_rgba(124,58,237,0.8)]" />
-      </motion.div>
-      <motion.div
-        className="absolute bottom-36 left-24 w-16 h-16 rounded-full border border-cyan-500/20 hidden lg:block"
-        animate={{ rotate: -360 }}
-        transition={{ duration: 14, repeat: Infinity, ease: "linear" }}
-      >
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(6,182,212,0.8)]" />
-      </motion.div>
-
-      {/* ── Main content ── */}
-      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-
-        {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 20, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card border border-(--shopify)/25 mb-8"
-        >
-          <SiShopify className="text-(--shopify)" size={13} />
-          <span className="text-xs font-medium text-(--shopify)">Available for Shopify Projects</span>
-          <span className="w-1.5 h-1.5 rounded-full bg-(--shopify) animate-pulse" />
-        </motion.div>
-
-        {/* Name — word-safe letter-by-letter */}
-        <div className="mb-4 space-y-1">
-          {/*
-            Each word wrapped in whitespace-nowrap so characters never split mid-word.
-            Gap only between the two first-name words, not between individual letters.
-            Font: 2.5rem (40px) mobile → 3rem tablet → 4.5rem lg → 5.5rem xl.
-          */}
-          <div className="flex flex-wrap justify-center items-baseline gap-x-3 sm:gap-x-5">
-            {[
-              { word: "Vicmar", baseDelay: 0    },
-              { word: "Joseph", baseDelay: 0.35 },
-            ].map(({ word, baseDelay }) => (
-              <span
-                key={word}
-                className="inline-flex whitespace-nowrap text-[2.5rem] sm:text-5xl lg:text-6xl xl:text-[5.5rem] font-extrabold text-white leading-tight tracking-tight"
-              >
-                {word.split("").map((ch, i) => (
-                  <motion.span
-                    key={i}
-                    initial={{ opacity: 0, y: 40, rotateX: -90 }}
-                    animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                    transition={{ delay: baseDelay + 0.055 * i, duration: 0.5, ease: [0.33, 1, 0.68, 1] }}
-                    style={{ display: "inline-block", transformOrigin: "bottom" }}
-                  >
-                    {ch}
-                  </motion.span>
-                ))}
-              </span>
-            ))}
-          </div>
-
-          {/* Yanson — gradient, same scale */}
-          <div className="flex justify-center">
-            <span className="inline-flex whitespace-nowrap text-[2.5rem] sm:text-5xl lg:text-6xl xl:text-[5.5rem] font-extrabold leading-tight tracking-tight">
-              {"Yanson".split("").map((ch, i) => (
-                <motion.span
-                  key={i}
-                  className="gradient-text"
-                  initial={{ opacity: 0, y: 40, rotateX: -90 }}
-                  animate={{ opacity: 1, y: 0, rotateX: 0 }}
-                  transition={{ delay: 0.7 + 0.07 * i, duration: 0.5, ease: [0.33, 1, 0.68, 1] }}
-                  style={{ display: "inline-block", transformOrigin: "bottom" }}
-                >
-                  {ch}
-                </motion.span>
-              ))}
+export default function Hero() {
+  return (
+    <section id="top" className="border-b border-line px-6 pb-20 pt-16 sm:pt-24">
+      <div className="mx-auto max-w-5xl">
+        <Reveal>
+          <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-line bg-canvas px-3 py-1 text-[12.5px] text-ink-2">
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full rounded-full bg-brand opacity-60" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand" />
             </span>
-          </div>
+            Open to contract and freelance work
+          </p>
+
+          <h1 className="max-w-3xl text-[2.1rem] font-semibold leading-[1.14] tracking-[-0.022em] sm:text-[2.75rem]">
+            I build Shopify storefronts that hold up in production.
+          </h1>
+        </Reveal>
+
+        <div className="mt-12 grid items-start gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+          <Reveal>
+            <div className="space-y-4 text-[15.5px] leading-[1.65] text-ink-2">
+              <p>
+                I&apos;m Vicmar, a Shopify developer based in Bacolod City,
+                Philippines. Since 2019 I&apos;ve worked almost entirely inside
+                Liquid — theme architecture, section and block schemas, cart and
+                checkout logic, and the app integrations that keep a large
+                catalogue coherent once marketing starts editing it.
+              </p>
+              <p>
+                Right now I&apos;m the senior developer on{" "}
+                <a
+                  href="https://inhhair.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-ink underline decoration-line-strong underline-offset-[3px] transition-colors hover:decoration-brand"
+                >
+                  INH Hair
+                </a>{" "}
+                and its sister brands at Komboventures in Los Angeles, working
+                across a Shopify Plus stack.
+              </p>
+            </div>
+
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <a
+                href="#contact"
+                className="rounded-md bg-brand px-4 py-2.5 text-[14px] font-medium text-white transition-colors hover:bg-brand-dark"
+              >
+                Start a project
+              </a>
+              <a
+                href="#work"
+                className="rounded-md border border-line-strong px-4 py-2.5 text-[14px] font-medium text-ink transition-colors hover:border-ink-3"
+              >
+                See recent work
+              </a>
+              <a
+                href="https://www.linkedin.com/in/vicmar-yanson/"
+                target="_blank"
+                rel="noreferrer"
+                className="px-1 text-[14px] text-ink-2 underline decoration-line-strong underline-offset-[3px] transition-colors hover:text-brand"
+              >
+                LinkedIn
+              </a>
+            </div>
+          </Reveal>
+
+          {/* min-w-0 keeps the scrolling <pre> from widening the grid track */}
+          <Reveal delay={120} className="min-w-0">
+            <LiquidSample />
+            <p className="mt-3 text-[12.5px] leading-relaxed text-ink-3">
+              Metafield-driven swatches, rendered server-side so the variant
+              picker survives a page load without JavaScript.
+            </p>
+          </Reveal>
         </div>
 
-        {/* Typewriter */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 1.1 }}
-          className="text-xl sm:text-2xl font-medium text-(--muted) mb-6 min-h-8"
-        >
-          <TypeWriter />
-        </motion.div>
-
-        {/* Tagline */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.2 }}
-          className="text-(--muted) max-w-2xl mx-auto mb-10 text-base sm:text-lg leading-relaxed"
-        >
-          6+ years building high-converting Shopify stores. Custom themes, Liquid templating,
-          GraphQL APIs, checkout optimization, and Shopify Plus — crafting experiences that convert.
-        </motion.p>
-
-        {/* CTA — magnetic */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.3 }}
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
-        >
-          <MagneticBtn href="#contact">
-            <HiMail size={16} />
-            Get In Touch
-          </MagneticBtn>
-
-          <motion.a
-            href="#experience"
-            whileHover={{ scale: 1.04, borderColor: "rgba(124,58,237,0.5)" }}
-            whileTap={{ scale: 0.97 }}
-            className="px-8 py-3 rounded-full font-semibold text-(--muted) border border-white/10 hover:text-white transition-colors"
-          >
-            View My Work
-          </motion.a>
-        </motion.div>
-
-        {/* Count-up stats */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1.5 }}
-          className="mt-16 flex flex-wrap items-center justify-center gap-8 sm:gap-16"
-        >
-          {STATS.map((s) => (
-            <div key={s.label} className="text-center">
-              <div className="text-2xl sm:text-3xl font-extrabold gradient-text">
-                <CountStat target={s.val} suffix={s.suf} />
+        <Reveal delay={200}>
+          <dl className="mt-16 grid grid-cols-3 gap-px overflow-hidden rounded-lg border border-line bg-line">
+            {FACTS.map((fact) => (
+              <div key={fact.label} className="bg-paper px-4 py-5 sm:px-6">
+                <dt className="text-[12.5px] leading-snug text-ink-3">
+                  {fact.label}
+                </dt>
+                <dd className="mt-1 text-[1.6rem] font-semibold tracking-tight tabular-nums">
+                  {fact.value}
+                </dd>
               </div>
-              <div className="text-xs text-(--muted) mt-1 tracking-wide">{s.label}</div>
-            </div>
-          ))}
-        </motion.div>
+            ))}
+          </dl>
+        </Reveal>
       </div>
-
-      {/* Scroll cue */}
-      <motion.a
-        href="#about"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-(--muted) hover:text-white transition-colors"
-      >
-        <span className="text-[10px] tracking-[0.2em] uppercase font-medium">Scroll</span>
-        <motion.div animate={{ y: [0, 7, 0] }} transition={{ duration: 1.4, repeat: Infinity }}>
-          <HiArrowDown size={15} />
-        </motion.div>
-      </motion.a>
     </section>
   );
 }

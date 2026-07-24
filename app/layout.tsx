@@ -1,26 +1,37 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const mono = JetBrains_Mono({
+  variable: "--font-mono-code",
   subsets: ["latin"],
 });
 
 export const metadata: Metadata = {
-  title: "Vicmar Joseph Yanson — Senior Shopify Developer",
+  metadataBase: new URL("https://vjyanson.dev"),
+  title: "Vicmar Yanson — Shopify Developer",
   description:
-    "Senior Shopify Developer with 6+ years building high-converting e-commerce stores. Custom themes, Liquid templating, Shopify Plus, GraphQL APIs, and checkout optimization.",
-  keywords: ["Shopify Developer", "Senior Shopify Dev", "Liquid", "Shopify Plus", "E-Commerce"],
+    "Shopify developer in Bacolod City, Philippines. Liquid theme architecture, Shopify Plus, and storefront performance for brands in the US, Australia, and the Philippines. Building for the web since 2018.",
+  keywords: [
+    "Shopify developer",
+    "Shopify Plus developer",
+    "Liquid developer",
+    "Shopify theme development",
+    "headless Shopify",
+    "Philippines",
+  ],
+  authors: [{ name: "Vicmar Joseph Yanson" }],
   openGraph: {
-    title: "Vicmar Joseph Yanson — Senior Shopify Developer",
+    title: "Vicmar Yanson — Shopify Developer",
     description:
-      "6+ years crafting high-converting Shopify stores. Custom themes, Liquid templating, Shopify Plus, GraphQL, and checkout optimization.",
+      "Liquid theme architecture, Shopify Plus, and storefront performance. Thirty live stores for brands in the US, Australia, and the Philippines.",
+    url: "https://vjyanson.dev",
+    siteName: "vjyanson.dev",
     type: "website",
   },
 };
@@ -31,11 +42,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-    >
-      <body className="min-h-screen bg-[#050505]">{children}</body>
+    <html lang="en" className={`${inter.variable} ${mono.variable}`}>
+      <body className="font-sans">{children}</body>
     </html>
   );
 }

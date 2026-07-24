@@ -1,297 +1,115 @@
-"use client";
-
-import { useRef, useState } from "react";
-import { motion, useInView, useSpring, useTransform } from "framer-motion";
-import { HiOfficeBuilding, HiLocationMarker, HiCalendar } from "react-icons/hi";
+import Reveal from "./Reveal";
+import SectionHeading from "./SectionHeading";
 
 const JOBS = [
   {
-    role:      "Senior Shopify Developer",
-    company:   "INH Hair / Komboventures",
-    location:  "Los Angeles, California, USA",
-    period:    "Feb 2023 — Present",
-    current:   true,
-    highlights: [
-      "Led PDP rebranding project — custom theme development with seamless new brand integration",
-      "Built and customized Shopify Liquid templates, GraphQL & REST APIs for data/product management",
-      "Integrated third-party APIs and Shopify Plus scripts for advanced discount logic",
-      "Configured payment gateways for secure, high-throughput transactions",
-      "Boosted mobile traffic, conversion rates, and overall shopping experience",
-      "Collaborated with design and marketing teams; continuous testing and debugging",
-    ],
-    tech: ["Shopify Plus", "Liquid", "GraphQL", "REST API", "JavaScript", "React", "SCSS"],
+    role: "Senior Shopify Developer",
+    company: "INH Hair / Komboventures",
+    location: "Los Angeles, US — remote",
+    period: "Feb 2023 — present",
+    current: true,
+    body: "Senior developer across INH Hair and INH Professional on Shopify Plus. I own the product page rebrand, the Liquid template layer, the Plus Scripts behind discount logic, payment gateway configuration, and the Rebuy integration. Day to day, a good share of it is sitting with design and marketing to work out what a section actually needs to do before I write it.",
+    tags: ["Shopify Plus", "Liquid", "GraphQL", "Scripts", "React", "SCSS"],
   },
   {
-    role:      "Shopify Developer",
-    company:   "Matador Group LLC",
-    location:  "Los Angeles, California, USA",
-    period:    "May 2022 — Nov 2022",
-    current:   false,
-    highlights: [
-      "Managed all company client Shopify storefronts end-to-end",
-      "Created custom themes and functions based on client specifications",
-      "Set up and customized Google Analytics for e-commerce tracking",
-      "Handled all revisions and quality assurance across the Shopify portfolio",
-    ],
-    tech: ["Shopify", "Liquid", "JavaScript", "Google Analytics"],
+    role: "Shopify Developer",
+    company: "Matador Group LLC",
+    location: "Los Angeles, US — remote",
+    period: "May 2022 — Nov 2022",
+    body: "Ran the Shopify side of the agency's client portfolio — custom themes and functionality built to spec, the revision cycles after, QA across accounts, and setting up Google Analytics ecommerce tracking so clients could see what their stores were doing.",
+    tags: ["Shopify", "Liquid", "JavaScript", "GA ecommerce"],
   },
   {
-    role:      "Shopify Developer",
-    company:   "CT21 Analytics",
-    location:  "Bacolod City, Philippines",
-    period:    "Sept 2021 — Jan 2022",
-    current:   false,
-    highlights: [
-      "Developed custom Shopify themes from scratch for multiple clients",
-      "Converted PSD / Adobe XD designs to fully functional Shopify stores",
-      "Built custom Liquid functions and managed all site revisions",
-    ],
-    tech: ["Shopify", "Liquid", "CSS/SCSS", "PSD-to-Shopify"],
+    role: "Shopify Developer",
+    company: "CT21 Analytics",
+    location: "Bacolod City, Philippines",
+    period: "Sept 2021 — Jan 2022",
+    body: "Built custom Shopify themes from scratch for a run of clients, mostly translating Adobe XD and flat PSD comps into Liquid, then adding the custom section logic each store needed on top.",
+    tags: ["Shopify", "Liquid", "SCSS", "XD to Liquid"],
   },
   {
-    role:      "PHP Web & WordPress Developer",
-    company:   "QRX Digital",
-    location:  "Jacksonville, Florida, USA",
-    period:    "Oct 2020 — Aug 2021",
-    current:   false,
-    highlights: [
-      "Developed custom WordPress and WooCommerce functionality",
-      "Converted PSD designs into pixel-perfect WordPress themes",
-      "Optimized site speed and performance across multiple client projects",
-      "Ensured full mobile and tablet responsiveness",
-    ],
-    tech: ["WordPress", "WooCommerce", "PHP", "SCSS"],
+    role: "PHP & WordPress Developer",
+    company: "QRX Digital",
+    location: "Jacksonville, US — remote",
+    period: "Oct 2020 — Aug 2021",
+    body: "WordPress and WooCommerce for US clients: custom theme and plugin functionality, pixel-accurate PSD-to-theme builds, responsive fixes, and speed passes on sites that had quietly accumulated too many plugins.",
+    tags: ["WordPress", "WooCommerce", "PHP", "SCSS"],
   },
   {
-    role:      "Shopify & WordPress Developer",
-    company:   "Arlena Marketing",
-    location:  "Melbourne, Australia",
-    period:    "Sept 2019 — Sept 2020",
-    current:   false,
-    highlights: [
-      "Modified and extended custom WordPress / WooCommerce functions",
-      "Converted PSD files to WordPress themes",
-      "Created custom scripts for a Shopify e-commerce store",
-      "Optimized website performance and loading speed",
-    ],
-    tech: ["Shopify", "WordPress", "PHP", "Custom Scripts"],
+    role: "Shopify & WordPress Developer",
+    company: "Arlena Marketing",
+    location: "Melbourne, Australia — remote",
+    period: "Sept 2019 — Sept 2020",
+    body: "Split between extending WordPress and WooCommerce for Australian clients and my first production Shopify work — custom scripts for a client store, PSD-to-theme conversions, and performance tuning.",
+    tags: ["Shopify", "WordPress", "PHP", "jQuery"],
   },
   {
-    role:      "PHP & Front-End Developer",
-    company:   "ClickableBrand Inc.",
-    location:  "Cebu City, Philippines",
-    period:    "July 2018 — Sept 2019",
-    current:   false,
-    highlights: [
-      "Implemented internal business automation using SuiteCRM and SugarCRM",
-      "Transitioned to front-end team — WordPress, HTML, SASS development",
-      "Converted PSD files to HTML/CSS templates",
-    ],
-    tech: ["PHP", "SuiteCRM", "WordPress", "HTML", "SASS"],
+    role: "PHP & Front-End Developer",
+    company: "ClickableBrand Inc.",
+    location: "Cebu City, Philippines",
+    period: "July 2018 — Sept 2019",
+    body: "Started on internal business automation in SuiteCRM and SugarCRM, then moved across to the front-end team building WordPress themes and converting PSDs to HTML and SASS. Where I learned to work inside someone else's codebase without breaking it.",
+    tags: ["PHP", "SuiteCRM", "WordPress", "SASS"],
   },
 ];
 
-/* ─── 3-D Tilt wrapper ─── */
-function TiltCard({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  const cardRef   = useRef<HTMLDivElement>(null);
-  const [hov, setHov] = useState(false);
-
-  const rawX = useSpring(0, { stiffness: 300, damping: 35 });
-  const rawY = useSpring(0, { stiffness: 300, damping: 35 });
-
-  const rotateX = useTransform(rawY, [-1, 1], [10, -10]);
-  const rotateY = useTransform(rawX, [-1, 1], [-10, 10]);
-
-  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const r = cardRef.current.getBoundingClientRect();
-    rawX.set(((e.clientX - r.left) / r.width)  * 2 - 1);
-    rawY.set(((e.clientY - r.top)  / r.height) * 2 - 1);
-  };
-  const onLeave = () => { rawX.set(0); rawY.set(0); setHov(false); };
-
-  return (
-    <motion.div
-      ref={cardRef}
-      onMouseMove={onMove}
-      onMouseEnter={() => setHov(true)}
-      onMouseLeave={onLeave}
-      style={{ rotateX, rotateY, transformStyle: "preserve-3d", perspective: 1000 }}
-      animate={{ scale: hov ? 1.015 : 1 }}
-      transition={{ scale: { duration: 0.2 } }}
-      className={className}
-    >
-      {/* Spotlight glow that follows mouse */}
-      {hov && (
-        <motion.div
-          className="absolute inset-0 rounded-2xl pointer-events-none"
-          style={{
-            background: `radial-gradient(300px circle at ${
-              cardRef.current
-                ? `${((rawX.get() + 1) / 2) * 100}% ${((rawY.get() + 1) / 2) * 100}%`
-                : "50% 50%"
-            }, rgba(124,58,237,0.08) 0%, transparent 70%)`,
-          }}
-        />
-      )}
-      {children}
-    </motion.div>
-  );
-}
-
-/* ─── Section ─── */
 export default function Experience() {
-  const ref    = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-
   return (
-    <section
-      id="experience"
-      ref={ref}
-      className="py-28 px-6 bg-linear-to-b from-transparent via-purple-950/5 to-transparent"
-    >
-      <div className="max-w-4xl mx-auto">
-        {/* Heading — word flip-in */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7 }}
-          className="mb-16"
-        >
-          <span className="text-xs font-bold tracking-[0.2em] text-(--cyan) uppercase">
-            02 — Experience
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-2">
-            Work{" "}
-            <motion.span
-              className="gradient-text inline-block"
-              initial={{ opacity: 0, rotateX: -90, y: 20 }}
-              animate={inView ? { opacity: 1, rotateX: 0, y: 0 } : {}}
-              transition={{ delay: 0.2, duration: 0.6, ease: [0.33, 1, 0.68, 1] }}
-              style={{ transformOrigin: "bottom", display: "inline-block" }}
+    <section id="experience" className="border-b border-line px-6 py-20 sm:py-24">
+      <div className="mx-auto max-w-5xl">
+        <SectionHeading
+          eyebrow="Experience"
+          title="Where I've worked"
+          lead="Six companies across the Philippines, Australia, and the United States. Everything from 2019 onward has had Shopify in it somewhere."
+        />
+
+        <ol className="mt-12">
+          {JOBS.map((job, i) => (
+            <Reveal
+              key={job.company}
+              as="li"
+              delay={Math.min(i, 3) * 60}
+              className="border-t border-line py-7 first:border-t-0 first:pt-0"
             >
-              History
-            </motion.span>
-          </h2>
-        </motion.div>
+              <div className="grid gap-x-10 gap-y-3 sm:grid-cols-[10rem_1fr]">
+                <div className="sm:pt-0.5">
+                  <p className="font-mono text-[12px] leading-relaxed text-ink-3">
+                    {job.period}
+                  </p>
+                  {job.current && (
+                    <p className="mt-1.5 inline-flex items-center gap-1.5 text-[12px] font-medium text-brand">
+                      <span className="h-1.5 w-1.5 rounded-full bg-brand" />
+                      Current
+                    </p>
+                  )}
+                </div>
 
-        <div className="relative">
-          {/* Timeline spine */}
-          <motion.div
-            className="absolute left-5.5 top-6 w-px hidden sm:block origin-top"
-            style={{ background: "linear-gradient(to bottom, #7c3aed, #06b6d4, transparent)" }}
-            initial={{ scaleY: 0 }}
-            animate={inView ? { scaleY: 1 } : {}}
-            transition={{ duration: 1.2, delay: 0.3, ease: "easeOut" }}
-          >
-            {/* height computed from number of cards */}
-            <div style={{ height: `${JOBS.length * 210}px` }} />
-          </motion.div>
-
-          <div className="space-y-6">
-            {JOBS.map((job, i) => (
-              <JobCard key={i} job={job} index={i} inView={inView} />
-            ))}
-          </div>
-        </div>
+                <div>
+                  <h3 className="text-[16.5px] font-semibold tracking-tight">
+                    {job.role}
+                  </h3>
+                  <p className="mt-0.5 text-[13.5px] text-ink-3">
+                    {job.company} · {job.location}
+                  </p>
+                  <p className="mt-3 max-w-2xl text-[14.5px] leading-[1.7] text-ink-2">
+                    {job.body}
+                  </p>
+                  <ul className="mt-4 flex flex-wrap gap-1.5">
+                    {job.tags.map((tag) => (
+                      <li
+                        key={tag}
+                        className="rounded border border-line bg-canvas px-2 py-0.5 font-mono text-[11.5px] text-ink-3"
+                      >
+                        {tag}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </ol>
       </div>
     </section>
-  );
-}
-
-function JobCard({
-  job, index, inView,
-}: { job: typeof JOBS[0]; index: number; inView: boolean }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: -40 }}
-      animate={inView ? { opacity: 1, x: 0 } : {}}
-      transition={{ duration: 0.6, delay: index * 0.1, ease: [0.33, 1, 0.68, 1] }}
-      className="relative sm:pl-14"
-    >
-      {/* Timeline dot */}
-      <div
-        className={`absolute left-3.75 top-6 w-4 h-4 rounded-full border-2 hidden sm:flex items-center justify-center shrink-0 ${
-          job.current
-            ? "border-(--purple) bg-(--purple)"
-            : "border-white/20 bg-[#050505]"
-        }`}
-      >
-        {job.current && (
-          <span className="absolute inset-0 rounded-full bg-(--purple) animate-ping opacity-40" />
-        )}
-      </div>
-
-      <TiltCard className="glass-card rounded-2xl p-6 relative overflow-hidden">
-        {/* Shimmer line on top edge */}
-        <motion.div
-          className="absolute top-0 left-0 right-0 h-px"
-          style={{
-            background: job.current
-              ? "linear-gradient(90deg, transparent, #7c3aed, #06b6d4, transparent)"
-              : "linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent)",
-          }}
-          initial={{ scaleX: 0 }}
-          animate={inView ? { scaleX: 1 } : {}}
-          transition={{ delay: 0.4 + index * 0.1, duration: 0.8 }}
-        />
-
-        {/* Header */}
-        <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
-          <div>
-            <div className="flex items-center flex-wrap gap-2 mb-1">
-              <h3 className="text-white font-bold text-base sm:text-lg">{job.role}</h3>
-              {job.current && (
-                <span className="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-purple-500/15 text-purple-300 border border-purple-500/30">
-                  Current
-                </span>
-              )}
-            </div>
-            <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-(--muted)">
-              <span className="flex items-center gap-1">
-                <HiOfficeBuilding size={13} className="shrink-0" />{job.company}
-              </span>
-              <span className="flex items-center gap-1">
-                <HiLocationMarker size={13} className="shrink-0" />{job.location}
-              </span>
-            </div>
-          </div>
-          <span className="flex items-center gap-1.5 text-[11px] text-(--muted) bg-white/5 px-3 py-1 rounded-full whitespace-nowrap border border-white/5">
-            <HiCalendar size={11} />{job.period}
-          </span>
-        </div>
-
-        {/* Highlights */}
-        <ul className="space-y-1.5 mb-4">
-          {job.highlights.map((h, j) => (
-            <motion.li
-              key={j}
-              initial={{ opacity: 0, x: -10 }}
-              animate={inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ delay: 0.5 + index * 0.1 + j * 0.04 }}
-              className="flex items-start gap-2 text-sm text-(--muted) leading-relaxed"
-            >
-              <span className="text-(--purple) mt-0.5 shrink-0 text-xs">▸</span>
-              {h}
-            </motion.li>
-          ))}
-        </ul>
-
-        {/* Tech tags */}
-        <div className="flex flex-wrap gap-2">
-          {job.tech.map((t, ti) => (
-            <motion.span
-              key={t}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={inView ? { opacity: 1, scale: 1 } : {}}
-              transition={{ delay: 0.6 + index * 0.08 + ti * 0.04 }}
-              className="text-[11px] px-2.5 py-1 rounded-full bg-white/4 text-(--muted) border border-white/5 hover:border-purple-500/30 hover:text-white transition-colors"
-            >
-              {t}
-            </motion.span>
-          ))}
-        </div>
-      </TiltCard>
-    </motion.div>
   );
 }

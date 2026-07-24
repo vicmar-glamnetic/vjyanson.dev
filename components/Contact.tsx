@@ -1,204 +1,198 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
-import { HiMail, HiPhone, HiLocationMarker, HiCheckCircle } from "react-icons/hi";
-import { FaLinkedinIn, FaWhatsapp } from "react-icons/fa6";
+import { useState } from "react";
 
-const INFO = [
-  { icon: HiMail,           label: "Email",    value: "vicmar.yanson@gmail.com",   href: "mailto:vicmar.yanson@gmail.com" },
-  { icon: HiPhone,          label: "Phone",    value: "+63 919 614 7785",           href: "tel:+639196147785"           },
-  { icon: HiLocationMarker, label: "Location", value: "Bacolod City, Philippines",  href: null                         },
+const DETAILS = [
+  {
+    label: "Email",
+    value: "vicmar.yanson@gmail.com",
+    href: "mailto:vicmar.yanson@gmail.com",
+  },
+  { label: "WhatsApp", value: "+63 919 614 7785", href: "https://wa.me/639196147785" },
+  {
+    label: "LinkedIn",
+    value: "in/vicmar-yanson",
+    href: "https://www.linkedin.com/in/vicmar-yanson/",
+  },
+  { label: "Based in", value: "Bacolod City, Philippines (GMT+8)", href: null },
 ];
 
-const FORMSPREE_ENDPOINT = "/api/contact";
+type Status = "idle" | "sending" | "sent" | "error";
 
 export default function Contact() {
-  const ref    = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-
-  const [form,      setForm]      = useState({ name: "", email: "", message: "" });
-  const [loading,   setLoading]   = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [status, setStatus] = useState<Status>("idle");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setStatus("sending");
 
-    if (FORMSPREE_ENDPOINT) {
-      // Formspree — sends directly to contact@vjyanson.com, no email client needed
-      const res = await fetch(FORMSPREE_ENDPOINT, {
-        method:  "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body:    JSON.stringify({ name: form.name, email: form.email, message: form.message }),
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
       });
-      setLoading(false);
-      if (res.ok) {
-        setSubmitted(true);
-        setForm({ name: "", email: "", message: "" });
-      } else {
-        alert("Something went wrong. Please email contact@vjyanson.com directly.");
-      }
-    } else {
-      // Fallback until Formspree is set up
-      window.location.href = `mailto:contact@vjyanson.com?subject=Portfolio Inquiry from ${encodeURIComponent(form.name)}&body=${encodeURIComponent(
-        `Hi Vicmar,\n\n${form.message}\n\n— ${form.name}\n${form.email}`
-      )}`;
-      setLoading(false);
-      setSubmitted(true);
+
+      if (!res.ok) throw new Error("Request failed");
+
+      setStatus("sent");
+      setForm({ name: "", email: "", message: "" });
+    } catch {
+      setStatus("error");
     }
   };
 
-  return (
-    <section
-      id="contact"
-      ref={ref}
-      className="py-28 px-6 bg-linear-to-b from-transparent via-purple-950/5 to-transparent"
-    >
-      <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7 }}
-          className="mb-16"
-        >
-          <span className="text-xs font-bold tracking-[0.2em] text-(--cyan) uppercase">
-            05 — Contact
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mt-2">
-            Let&apos;s <span className="gradient-text">Work Together</span>
-          </h2>
-        </motion.div>
+  const field =
+    "w-full rounded-md border border-white/15 bg-white/6 px-3 py-2.5 text-[14.5px] text-white placeholder:text-white/35 outline-none transition-colors focus:border-lime/70 focus:bg-white/10";
 
-        <div className="grid lg:grid-cols-2 gap-14">
-          {/* Left — info */}
-          <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.15 }}
-            className="space-y-8"
-          >
-            <p className="text-(--muted) leading-relaxed text-base">
-              Looking for a Shopify expert who can take your store from good to exceptional?
-              Whether it&apos;s a full custom theme build, Shopify Plus migration, performance
-              optimization, or complex API integrations — let&apos;s build something great together.
+  return (
+    <section id="contact" className="bg-brand-dark px-6 py-20 text-white sm:py-24">
+      <div className="mx-auto max-w-5xl">
+        <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-20">
+          <div>
+            <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-lime">
+              Contact
+            </p>
+            <h2 className="mt-2.5 text-[1.75rem] font-semibold tracking-[-0.02em] sm:text-[2rem]">
+              Tell me about the store
+            </h2>
+            <p className="mt-3 max-w-md text-[15.5px] leading-[1.65] text-white/70">
+              A theme build, a rebrand, a store that got slow, or a job you
+              cannot get an app to do properly. Send me the details and I&apos;ll
+              tell you honestly whether it&apos;s something I should take on.
+            </p>
+            <p className="mt-3 max-w-md text-[14px] leading-[1.65] text-white/55">
+              I read everything and reply within a working day or two. I&apos;m
+              on Philippine time, which usually means an overlap with US
+              afternoons and Australian mornings.
             </p>
 
-            {/* Contact details */}
-            <div className="space-y-4">
-              {INFO.map((item) => (
-                <div key={item.label} className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center shrink-0">
-                    <item.icon className="text-(--purple)" size={16} />
-                  </div>
-                  <div>
-                    <div className="text-[10px] text-(--muted) uppercase tracking-widest mb-0.5">
-                      {item.label}
-                    </div>
-                    {item.href ? (
-                      <a href={item.href} className="text-white text-sm hover:text-(--purple) transition-colors">
-                        {item.value}
+            <dl className="mt-9 space-y-3.5">
+              {DETAILS.map((detail) => (
+                <div
+                  key={detail.label}
+                  className="grid grid-cols-[5.5rem_1fr] items-baseline gap-3 border-b border-white/10 pb-3.5 text-[14px]"
+                >
+                  <dt className="text-white/50">{detail.label}</dt>
+                  <dd>
+                    {detail.href ? (
+                      <a
+                        href={detail.href}
+                        target={detail.href.startsWith("http") ? "_blank" : undefined}
+                        rel="noreferrer"
+                        className="underline decoration-white/25 underline-offset-[3px] transition-colors hover:decoration-lime"
+                      >
+                        {detail.value}
                       </a>
                     ) : (
-                      <span className="text-white text-sm">{item.value}</span>
+                      <span className="text-white/85">{detail.value}</span>
                     )}
-                  </div>
+                  </dd>
                 </div>
               ))}
-            </div>
+            </dl>
+          </div>
 
-            {/* Socials */}
-            <div>
-              <p className="text-[10px] text-(--muted) uppercase tracking-[0.2em] mb-3">
-                Find me on
-              </p>
-              <div className="flex gap-3">
-                {[
-                  { icon: FaWhatsapp,   label: "WhatsApp", color: "#25d366", href: "https://wa.me/639196147785" },
-                  { icon: FaLinkedinIn, label: "LinkedIn", color: "#0a66c2", href: "https://www.linkedin.com/in/vicmar-yanson/" },
-                ].map((s) => (
-                  <a
-                    key={s.label}
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    title={s.label}
-                    className="w-10 h-10 rounded-xl glass-card flex items-center justify-center hover:scale-110 transition-transform"
-                  >
-                    <s.icon size={16} style={{ color: s.color }} />
-                  </a>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Right — form */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.7, delay: 0.25 }}
-          >
-            {submitted ? (
-              <div className="glass-card rounded-2xl p-10 text-center space-y-4 h-full flex flex-col items-center justify-center">
-                <HiCheckCircle size={52} className="text-(--shopify)" />
-                <h3 className="text-white font-bold text-xl">Thanks for reaching out!</h3>
-                <p className="text-(--muted) text-sm">
-                  Your email client should have opened. I&apos;ll get back to you soon.
+          <div>
+            {status === "sent" ? (
+              <div className="rounded-lg border border-white/15 bg-white/6 p-8">
+                <h3 className="text-[17px] font-semibold">Message sent</h3>
+                <p className="mt-2 text-[14.5px] leading-[1.65] text-white/70">
+                  It&apos;s in my inbox. I&apos;ll reply to the address you gave
+                  me, usually within a working day or two.
                 </p>
                 <button
-                  onClick={() => setSubmitted(false)}
-                  className="text-xs text-(--purple) hover:text-white transition-colors mt-2"
+                  type="button"
+                  onClick={() => setStatus("idle")}
+                  className="mt-5 text-[14px] text-lime underline underline-offset-[3px]"
                 >
-                  Send another message
+                  Send another
                 </button>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-5">
-                {[
-                  { label: "Your Name",     name: "name",  type: "text",  placeholder: "John Doe"         },
-                  { label: "Email Address", name: "email", type: "email", placeholder: "john@example.com" },
-                ].map((f) => (
-                  <div key={f.name}>
-                    <label className="block text-[10px] text-(--muted) uppercase tracking-[0.15em] mb-2">
-                      {f.label}
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="name"
+                      className="mb-1.5 block text-[13px] text-white/60"
+                    >
+                      Name
                     </label>
                     <input
-                      type={f.type}
+                      id="name"
+                      name="name"
                       required
-                      placeholder={f.placeholder}
-                      value={form[f.name as keyof typeof form]}
-                      onChange={(e) => setForm({ ...form, [f.name]: e.target.value })}
-                      className="w-full px-4 py-3 rounded-xl bg-white/4 border border-white/8 text-white placeholder-(--muted) focus:outline-none focus:border-purple-500/50 focus:bg-purple-500/5 transition-all text-sm"
+                      autoComplete="name"
+                      value={form.name}
+                      onChange={(e) => setForm({ ...form, name: e.target.value })}
+                      className={field}
                     />
                   </div>
-                ))}
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="mb-1.5 block text-[13px] text-white/60"
+                    >
+                      Email
+                    </label>
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      required
+                      autoComplete="email"
+                      value={form.email}
+                      onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      className={field}
+                    />
+                  </div>
+                </div>
 
                 <div>
-                  <label className="block text-[10px] text-(--muted) uppercase tracking-[0.15em] mb-2">
-                    Message
+                  <label
+                    htmlFor="message"
+                    className="mb-1.5 block text-[13px] text-white/60"
+                  >
+                    What are you working on?
                   </label>
                   <textarea
+                    id="message"
+                    name="message"
                     required
-                    rows={5}
-                    placeholder="Tell me about your project..."
+                    rows={7}
+                    placeholder="Store URL, what needs doing, and roughly when you need it."
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl bg-white/4 border border-white/8 text-white placeholder-(--muted) focus:outline-none focus:border-purple-500/50 focus:bg-purple-500/5 transition-all text-sm resize-none"
+                    className={`${field} resize-y`}
                   />
                 </div>
 
+                {status === "error" && (
+                  <p role="alert" className="text-[13.5px] text-[#ffb4a8]">
+                    That didn&apos;t send — something went wrong on my end.
+                    Please email{" "}
+                    <a
+                      href="mailto:vicmar.yanson@gmail.com"
+                      className="underline underline-offset-[3px]"
+                    >
+                      vicmar.yanson@gmail.com
+                    </a>{" "}
+                    directly and it&apos;ll reach me.
+                  </p>
+                )}
+
                 <button
                   type="submit"
-                  disabled={loading}
-                  className="animated-border p-0.5 rounded-full w-full inline-flex group disabled:opacity-60"
+                  disabled={status === "sending"}
+                  className="rounded-md bg-lime px-5 py-2.5 text-[14.5px] font-medium text-brand-dark transition-colors hover:bg-white disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  <span className="flex items-center justify-center gap-2 w-full py-3.5 bg-[#050505] rounded-full font-semibold text-white group-hover:bg-transparent transition-colors text-sm">
-                    {loading ? "Opening email…" : "Send Message →"}
-                  </span>
+                  {status === "sending" ? "Sending…" : "Send message"}
                 </button>
               </form>
             )}
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

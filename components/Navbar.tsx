@@ -1,109 +1,104 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { HiMenu, HiX } from "react-icons/hi";
+import { useEffect, useState } from "react";
 
-const navLinks = [
-  { label: "About",      href: "#about"      },
+const LINKS = [
+  { label: "Work", href: "#work" },
+  { label: "Services", href: "#services" },
   { label: "Experience", href: "#experience" },
-  { label: "Projects",   href: "#projects"   },
-  { label: "Skills",     href: "#skills"     },
-  { label: "Contact",    href: "#contact"    },
+  { label: "Stack", href: "#stack" },
 ];
 
 export default function Navbar() {
-  const [scrolled, setScrolled]   = useState(false);
-  const [menuOpen, setMenuOpen]   = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 30);
-    window.addEventListener("scroll", handler);
-    return () => window.removeEventListener("scroll", handler);
-  }, []);
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
 
   return (
-    <motion.nav
-      initial={{ y: -80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "py-3 glass-card border-b border-white/5" : "py-5"
-      }`}
-    >
-      <div className="max-w-6xl mx-auto px-6 flex items-center justify-between">
-        {/* Logo */}
-        <a href="#" className="flex items-center gap-2 group">
-          <div className="animated-border p-[1.5px] rounded-lg">
-            <div className="w-8 h-8 rounded-[6px] bg-[#050505] flex items-center justify-center text-sm font-bold text-white">
-              V
-            </div>
-          </div>
-          <span className="font-semibold text-white text-sm">vjyanson</span>
+    <header className="sticky top-0 z-50 border-b border-line bg-paper/90 backdrop-blur-sm">
+      <nav className="mx-auto flex max-w-5xl items-center justify-between px-6 py-3.5">
+        <a href="#top" className="group flex items-baseline gap-2">
+          <span className="text-[15px] font-semibold tracking-tight">
+            Vicmar Yanson
+          </span>
+          <span className="hidden text-[13px] text-ink-3 sm:inline">
+            Shopify Developer
+          </span>
         </a>
 
-        {/* Desktop links */}
-        <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
+        <div className="hidden items-center gap-7 md:flex">
+          {LINKS.map((link) => (
             <a
-              key={link.label}
+              key={link.href}
               href={link.href}
-              className="text-[var(--muted)] hover:text-white transition-colors text-sm font-medium relative group"
+              className="text-[13.5px] text-ink-2 transition-colors hover:text-brand"
             >
               {link.label}
-              <span className="absolute -bottom-0.5 left-0 w-0 h-[1.5px] bg-gradient-to-r from-[var(--purple)] to-[var(--cyan)] group-hover:w-full transition-all duration-300 rounded-full" />
             </a>
           ))}
-          <a href="#contact" className="animated-border p-[1.5px] rounded-full inline-flex">
-            <span className="px-5 py-1.5 text-sm font-semibold text-white bg-[#050505] rounded-full hover:bg-transparent transition-colors whitespace-nowrap">
-              Hire Me
-            </span>
+          <a
+            href="#contact"
+            className="rounded-md bg-brand px-3.5 py-1.5 text-[13.5px] font-medium text-white transition-colors hover:bg-brand-dark"
+          >
+            Get in touch
           </a>
         </div>
 
-        {/* Mobile toggle */}
         <button
-          className="md:hidden text-white p-1"
-          onClick={() => setMenuOpen(!menuOpen)}
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
           aria-label="Toggle menu"
+          className="-mr-1 p-1 text-ink-2 md:hidden"
         >
-          {menuOpen ? <HiX size={22} /> : <HiMenu size={22} />}
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden>
+            {open ? (
+              <path
+                d="M5 5l10 10M15 5L5 15"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+              />
+            ) : (
+              <path
+                d="M3 6h14M3 10h14M3 14h14"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+              />
+            )}
+          </svg>
         </button>
-      </div>
+      </nav>
 
-      {/* Mobile drawer */}
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden overflow-hidden border-t border-white/5 mt-2"
-          >
-            <div className="px-6 py-5 flex flex-col gap-5 bg-[#050505]/95 backdrop-blur-xl">
-              {navLinks.map((link) => (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  onClick={() => setMenuOpen(false)}
-                  className="text-[var(--muted)] hover:text-white transition-colors font-medium text-base"
-                >
-                  {link.label}
-                </a>
-              ))}
+      {open && (
+        <div className="border-t border-line bg-paper md:hidden">
+          <div className="mx-auto flex max-w-5xl flex-col px-6 py-2">
+            {LINKS.map((link) => (
               <a
-                href="#contact"
-                onClick={() => setMenuOpen(false)}
-                className="animated-border p-[1.5px] rounded-full inline-flex w-fit"
+                key={link.href}
+                href={link.href}
+                onClick={() => setOpen(false)}
+                className="border-b border-line py-3 text-[15px] text-ink-2 last:border-0"
               >
-                <span className="px-6 py-2 text-sm font-semibold text-white bg-[#050505] rounded-full">
-                  Hire Me
-                </span>
+                {link.label}
               </a>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.nav>
+            ))}
+            <a
+              href="#contact"
+              onClick={() => setOpen(false)}
+              className="py-3 text-[15px] font-medium text-brand"
+            >
+              Get in touch
+            </a>
+          </div>
+        </div>
+      )}
+    </header>
   );
 }
