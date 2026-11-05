@@ -248,7 +248,8 @@ body {
 }
 
 /* ---------- Word-by-word heading reveal (inside a Reveal) ---------- */
-.words .w {
+.words .w,
+.words-anim .w {
   display: inline-block;
   overflow: hidden;
   vertical-align: top;
@@ -329,4 +330,76 @@ body {
   .wipe { clip-path: none; }
   .load-in { opacity: 1; filter: none; }
   .logo-draw path { stroke-dashoffset: 0; }
+}
+
+/* Words that rise every time the element mounts (used when content swaps) */
+.words-anim .w > span {
+  display: inline-block;
+  animation: word-up 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--i, 0) * 45ms);
+}
+@keyframes word-up {
+  from { transform: translateY(108%); }
+}
+
+/* Device mockups slide up into place */
+.device-in {
+  animation: device-in 0.85s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--dl, 0s);
+}
+@keyframes device-in {
+  from { opacity: 0; transform: translateY(32px) scale(0.97); }
+}
+
+/* Checkmarks draw themselves */
+.check-draw path {
+  stroke-dasharray: 20;
+  stroke-dashoffset: 20;
+  animation: check 0.45s ease-out forwards;
+  animation-delay: var(--dl, 0s);
+}
+@keyframes check {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ---------- Scroll-linked focus (rauno.me-style) ----------
+   Content sharpens out of a soft blur as it scrolls in, and softens again
+   as it leaves the top. Driven by scroll position, not time. */
+@supports (animation-timeline: view()) {
+  .focus-scroll {
+    animation:
+      focus-in linear both,
+      focus-out linear forwards;
+    animation-timeline: view(), view();
+    animation-range:
+      entry 0% cover 38%,
+      exit 15% exit 100%;
+  }
+  .scroll-x {
+    animation: slide-x linear both;
+    animation-timeline: view();
+  }
+}
+@keyframes focus-in {
+  from { opacity: 0; filter: blur(10px); transform: translateY(28px) scale(0.98); }
+  to { opacity: 1; filter: blur(0); transform: none; }
+}
+@keyframes focus-out {
+  from { opacity: 1; filter: blur(0); transform: none; }
+  to { opacity: 0.15; filter: blur(6px); transform: translateY(-14px) scale(0.985); }
+}
+@keyframes slide-x {
+  from { transform: translateX(var(--from, 0)); }
+  to { transform: translateX(var(--to, 0)); }
+}
+
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--color-ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .words-anim .w > span, .device-in { animation: none; }
+  .check-draw path { stroke-dashoffset: 0; }
+  .focus-scroll, .scroll-x { animation: none; }
 }

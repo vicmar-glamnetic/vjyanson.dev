@@ -24,7 +24,7 @@ const STEPS = [
   },
   {
     title: "Launch",
-    url: "inhhair.com",
+    url: "inhprofessional.com",
     body: "Tested on real devices, images and scripts trimmed, redirects in place, then handed over with notes on how it all fits together.",
   },
 ];
@@ -164,7 +164,7 @@ export default function Process() {
                             designed ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
                           }`}
                         >
-                          Volume, without the weight.
+                          Your chair is our R&amp;D lab.
                         </p>
                       </div>
                       <div className={`mt-[10%] h-1.5 w-[60%] rounded ${tr} ${designed ? "bg-ink-2/40" : "bg-ink-3/20"}`} />
@@ -212,7 +212,7 @@ export default function Process() {
                   className="absolute inset-0 transition-[clip-path] duration-1000 ease-[cubic-bezier(0.22,1,0.36,1)]"
                   style={{ clipPath: stage === 3 ? "inset(0 0 0 0)" : "inset(0 0 100% 0)" }}
                 >
-                  <Image src={shotSrc("inh-hair")} alt="INH Hair homepage, live" fill sizes="(min-width: 1024px) 680px, 100vw" className="object-cover object-top" />
+                  <Image src={shotSrc("inh-professional")} alt="INH Professional homepage, live" fill sizes="(min-width: 1024px) 680px, 100vw" className="object-cover object-top" />
                 </div>
                 <div
                   className={`absolute bottom-[5%] left-1/2 -translate-x-1/2 rounded-md bg-ink px-3 py-1.5 text-[11px] text-white shadow-lg transition-all duration-500 ${

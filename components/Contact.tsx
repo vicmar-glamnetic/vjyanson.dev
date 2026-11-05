@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LocalTime from "./LocalTime";
 import Reveal from "./Reveal";
 import SplitWords from "./SplitWords";
@@ -30,6 +30,16 @@ export default function Contact() {
   const [form, setForm] = useState({ name: "", email: "", type: PROJECT_TYPES[0], message: "" });
   const [status, setStatus] = useState<Status>("idle");
   const [copied, setCopied] = useState(false);
+
+  // "Start a project like this" in the website-types section pre-selects the type.
+  useEffect(() => {
+    const onPick = (e: Event) => {
+      const type = (e as CustomEvent<string>).detail;
+      if (PROJECT_TYPES.includes(type)) setForm((f) => ({ ...f, type }));
+    };
+    window.addEventListener("project-type", onPick);
+    return () => window.removeEventListener("project-type", onPick);
+  }, []);
 
   const copyEmail = async () => {
     try {
