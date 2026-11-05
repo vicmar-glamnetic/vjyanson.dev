@@ -28,7 +28,7 @@ export default function Navbar() {
       },
       { rootMargin: "-45% 0px -50% 0px" }
     );
-    ["top", ...LINKS.map((l) => l.id), "stack", "contact"].forEach((id) => {
+    ["top", ...LINKS.map((l) => l.id), "process", "stack", "contact"].forEach((id) => {
       const el = document.getElementById(id);
       if (el) io.observe(el);
     });

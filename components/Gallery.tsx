@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import Reveal from "./Reveal";
 import { SITES, domainOf, shotSrc, type Platform } from "@/lib/sites";
 
 type Filter = "All" | Platform;
@@ -52,11 +53,7 @@ export default function Gallery() {
 
       <ul key={filter} className="mt-8 grid gap-x-5 gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
         {sites.map((site, i) => (
-          <li
-            key={site.url}
-            className="fade-up"
-            style={{ animationDelay: `${Math.min(i, 9) * 45}ms` }}
-          >
+          <Reveal key={site.url} as="li" delay={(i % 3) * 90}>
             <a href={site.url} target="_blank" rel="noreferrer" className="group block">
               <div className="relative aspect-[16/10] overflow-hidden rounded-md border border-line bg-canvas">
                 {site.shot ? (
@@ -90,7 +87,7 @@ export default function Gallery() {
                 <span className="mt-0.5 shrink-0 text-[12.5px] text-ink-3">{site.platform}</span>
               </div>
             </a>
-          </li>
+          </Reveal>
         ))}
       </ul>
     </div>

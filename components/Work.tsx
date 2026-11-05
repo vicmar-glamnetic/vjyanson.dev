@@ -2,6 +2,7 @@ import Image from "next/image";
 import BrowserFrame from "./BrowserFrame";
 import Reveal from "./Reveal";
 import Gallery from "./Gallery";
+import SplitWords from "./SplitWords";
 import { shotSrc } from "@/lib/sites";
 
 const FEATURED = [
@@ -77,8 +78,8 @@ export default function Work() {
       <div className="mx-auto max-w-6xl">
         <Reveal>
           <p className="text-[14px] font-medium text-brand">Selected work</p>
-          <h2 className="mt-2.5 max-w-3xl font-display text-[2.1rem] font-semibold leading-[1.08] tracking-[-0.03em] sm:text-[2.9rem]">
-            Stores and sites I&apos;ve shipped
+          <h2 className="words mt-2.5 max-w-3xl font-display text-[2.1rem] font-semibold leading-[1.08] tracking-[-0.03em] sm:text-[2.9rem]">
+            <SplitWords text="Stores and sites I've shipped" />
           </h2>
           <p className="mt-4 max-w-2xl text-[15.5px] leading-[1.65] text-ink-2">
             Four in detail, then everything else. Hover a screenshot to scroll
@@ -97,7 +98,7 @@ export default function Work() {
                   href={p.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="group parallax-slow block"
+                  className="group wipe parallax-slow block"
                   aria-label={`Visit ${p.domain}`}
                 >
                   <BrowserFrame url={p.domain}>
@@ -122,8 +123,8 @@ export default function Work() {
                   </span>
                   <span className="text-[13px] font-medium text-ink-2">{p.platform}</span>
                 </div>
-                <h3 className="mt-3 font-display text-[1.9rem] font-semibold tracking-[-0.025em]">
-                  {p.name}
+                <h3 className="words mt-3 font-display text-[1.9rem] font-semibold tracking-[-0.025em]">
+                  <SplitWords text={p.name} />
                 </h3>
                 <p className="mt-1 text-[13.5px] text-ink-3">
                   {p.sector} · {p.period}

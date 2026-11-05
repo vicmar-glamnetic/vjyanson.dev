@@ -50,9 +50,10 @@ export default function Services() {
               key={service.title}
               as="article"
               delay={(i % 3) * 80}
-              className="border-b border-line py-8 sm:pr-10"
+              className="group relative border-b border-line py-8 sm:pr-10"
             >
-              <h3 className="font-display text-[20px] font-semibold tracking-tight">
+              <span className="absolute -bottom-px left-0 h-[2px] w-full origin-left scale-x-0 bg-brand transition-transform duration-500 group-hover:scale-x-100" aria-hidden />
+              <h3 className="font-display text-[20px] font-semibold tracking-tight transition-transform duration-300 group-hover:translate-x-1">
                 {service.title}
               </h3>
               <p className="mt-3 text-[14.5px] leading-[1.7] text-ink-2">{service.body}</p>

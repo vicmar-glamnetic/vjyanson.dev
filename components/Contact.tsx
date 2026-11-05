@@ -3,6 +3,7 @@
 import { useState } from "react";
 import LocalTime from "./LocalTime";
 import Reveal from "./Reveal";
+import SplitWords from "./SplitWords";
 
 const EMAIL = "vicmar.yanson@gmail.com";
 
@@ -70,10 +71,12 @@ export default function Contact() {
       <div className="relative mx-auto max-w-6xl">
         <Reveal>
           <p className="text-[14px] font-medium text-lime">Contact</p>
-          <h2 className="mt-3 max-w-3xl font-display text-[2.5rem] font-semibold leading-[1.02] tracking-[-0.035em] sm:text-[4rem]">
-            Have a site in mind?
+          <h2 className="words mt-3 max-w-3xl font-display text-[2.5rem] font-semibold leading-[1.02] tracking-[-0.035em] sm:text-[4rem]">
+            <SplitWords text="Have a site in mind?" />
             <br />
-            <span className="text-white/45">Let&apos;s talk it through.</span>
+            <span className="text-white/45">
+              <SplitWords text="Let's talk it through." start={5} />
+            </span>
           </h2>
         </Reveal>
 

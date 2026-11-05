@@ -1,6 +1,5 @@
-import Image from "next/image";
-import BrowserFrame from "./BrowserFrame";
-import { SITES, shotSrc } from "@/lib/sites";
+import HeroStack from "./HeroStack";
+import { SITES } from "@/lib/sites";
 
 const shopifyCount = SITES.filter((s) => s.platform === "Shopify").length;
 const wpCount = SITES.filter((s) => s.platform === "WordPress").length;
@@ -12,31 +11,9 @@ const FACTS = [
   { value: "3", label: "Countries of clients" },
 ];
 
-const WINDOWS = [
-  {
-    slug: "inh-hair",
-    url: "inhhair.com",
-    pos: "left-0 top-0 w-[78%] z-10 -rotate-[2.5deg]",
-    d: "0.35s",
-  },
-  {
-    slug: "247-pro-restoration",
-    url: "247prorestoration.com",
-    pos: "right-0 top-[22%] w-[72%] z-20 rotate-[2deg]",
-    d: "0.55s",
-  },
-  {
-    slug: "modern-comfort-builders",
-    url: "moderncomfortbuilders.com",
-    pos: "left-[8%] top-[52%] w-[70%] z-30 -rotate-1",
-    d: "0.75s",
-  },
-];
-
 export default function Hero() {
   return (
     <section id="top" className="relative overflow-hidden border-b border-line">
-      
       <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-6 pb-16 pt-14 sm:pt-20 lg:grid-cols-[1.05fr_1fr] lg:gap-10 lg:pb-24">
         <div>
           <p
@@ -122,28 +99,7 @@ export default function Hero() {
         </div>
 
         {/* Overlapping browser windows with real screenshots */}
-        <div className="relative mx-auto aspect-[1/0.92] w-full max-w-[560px]">
-          {WINDOWS.map((w, i) => (
-            <div
-              key={w.slug}
-              className={`window-in absolute ${w.pos}`}
-              style={{ "--d": w.d } as React.CSSProperties}
-            >
-              <BrowserFrame url={w.url}>
-                <div className="relative aspect-[16/10]">
-                  <Image
-                    src={shotSrc(w.slug)}
-                    alt={`${w.url} homepage`}
-                    fill
-                    sizes="(min-width: 1024px) 420px, 75vw"
-                    className="object-cover object-top"
-                    preload={i === 0}
-                  />
-                </div>
-              </BrowserFrame>
-            </div>
-          ))}
-        </div>
+        <HeroStack />
       </div>
 
       <div className="relative mx-auto max-w-6xl px-6 pb-14">

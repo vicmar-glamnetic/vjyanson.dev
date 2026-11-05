@@ -4,6 +4,7 @@ import Marquee from "@/components/Marquee";
 import WebsiteTypes from "@/components/WebsiteTypes";
 import Work from "@/components/Work";
 import Services from "@/components/Services";
+import Process from "@/components/Process";
 import Experience from "@/components/Experience";
 import Stack from "@/components/Stack";
 import Approach from "@/components/Approach";
@@ -20,6 +21,7 @@ export default function Home() {
         <WebsiteTypes />
         <Work />
         <Services />
+        <Process />
         <Experience />
         <Stack />
         <Approach />
