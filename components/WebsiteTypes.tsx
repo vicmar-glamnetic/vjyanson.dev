@@ -163,9 +163,9 @@ export default function WebsiteTypes() {
                   aria-selected={on}
                   aria-controls="type-panel"
                   onClick={() => choose(i)}
-                  className={`relative block w-full overflow-hidden rounded-xl border px-5 py-4 text-left transition-all duration-300 ${
+                  className={`relative block w-full overflow-hidden rounded-md border px-5 py-4 text-left transition-all duration-300 ${
                     on
-                      ? "border-ink bg-paper shadow-[0_10px_30px_-18px_rgba(0,0,0,0.4)]"
+                      ? "border-ink bg-paper"
                       : "border-transparent hover:border-line-strong hover:bg-paper/60"
                   }`}
                 >
@@ -234,13 +234,13 @@ export default function WebsiteTypes() {
 
             <div className="mt-6 grid gap-6 sm:grid-cols-2">
               <div>
-                <p className="font-mono text-[11.5px] uppercase tracking-[0.12em] text-ink-3">Best for</p>
+                <p className="text-[13px] font-semibold text-ink">Best for</p>
                 <p className="mt-1.5 text-[14.5px] leading-[1.6] text-ink">{type.bestFor}</p>
-                <p className="mt-4 font-mono text-[11.5px] uppercase tracking-[0.12em] text-ink-3">Have ready</p>
+                <p className="mt-4 text-[13px] font-semibold text-ink">Have ready</p>
                 <p className="mt-1.5 text-[14px] leading-[1.6] text-ink-2">{type.bring}</p>
               </div>
               <div>
-                <p className="font-mono text-[11.5px] uppercase tracking-[0.12em] text-ink-3">Usually includes</p>
+                <p className="text-[13px] font-semibold text-ink">Usually includes</p>
                 <ul className="mt-2 space-y-1.5">
                   {type.includes.map((item) => (
                     <li key={item} className="flex items-center gap-2 text-[14px] text-ink-2">

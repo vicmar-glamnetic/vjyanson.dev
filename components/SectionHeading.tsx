@@ -13,7 +13,7 @@ export default function SectionHeading({
 }) {
   return (
     <Reveal>
-      <p className={`font-mono text-[12px] uppercase tracking-[0.14em] ${dark ? "text-lime" : "text-brand"}`}>
+      <p className={`text-[14px] font-medium ${dark ? "text-lime" : "text-brand"}`}>
         {eyebrow}
       </p>
       <h2 className="mt-2.5 max-w-3xl font-display text-[2.1rem] font-semibold leading-[1.08] tracking-[-0.03em] sm:text-[2.9rem]">

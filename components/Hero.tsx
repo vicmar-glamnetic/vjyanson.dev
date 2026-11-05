@@ -16,24 +16,18 @@ const WINDOWS = [
   {
     slug: "inh-hair",
     url: "inhhair.com",
-    tag: "Shopify Plus",
-    tagClass: "bg-brand text-white",
     pos: "left-0 top-0 w-[78%] z-10 -rotate-[2.5deg]",
     d: "0.35s",
   },
   {
     slug: "247-pro-restoration",
     url: "247prorestoration.com",
-    tag: "WordPress",
-    tagClass: "bg-wp text-white",
     pos: "right-0 top-[22%] w-[72%] z-20 rotate-[2deg]",
     d: "0.55s",
   },
   {
     slug: "modern-comfort-builders",
     url: "moderncomfortbuilders.com",
-    tag: "WordPress",
-    tagClass: "bg-wp text-white",
     pos: "left-[8%] top-[52%] w-[70%] z-30 -rotate-1",
     d: "0.75s",
   },
@@ -42,19 +36,14 @@ const WINDOWS = [
 export default function Hero() {
   return (
     <section id="top" className="relative overflow-hidden border-b border-line">
-      <div className="dot-grid pointer-events-none absolute inset-0" aria-hidden />
-
+      
       <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-6 pb-16 pt-14 sm:pt-20 lg:grid-cols-[1.05fr_1fr] lg:gap-10 lg:pb-24">
         <div>
           <p
-            className="fade-up mb-6 inline-flex items-center gap-2 rounded-full border border-line bg-paper px-3 py-1 text-[12.5px] text-ink-2"
+            className="fade-up mb-6 text-[14px] text-ink-3"
             style={{ animationDelay: "0.05s" }}
           >
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand opacity-50" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-brand" />
-            </span>
-            Taking on freelance & contract work
+            Available for freelance &amp; contract work — Bacolod City, PH
           </p>
 
           <h1 className="font-display text-[2.6rem] font-semibold leading-[1.02] tracking-[-0.035em] sm:text-[3.6rem] lg:text-[4.1rem]">
@@ -118,14 +107,14 @@ export default function Hero() {
           >
             <a
               href="#contact"
-              className="group inline-flex items-center gap-2 rounded-full bg-ink px-5 py-3 text-[14px] font-medium text-white transition-colors hover:bg-brand"
+              className="group inline-flex items-center gap-2 rounded-md bg-ink px-5 py-3 text-[14px] font-medium text-white transition-colors hover:bg-brand"
             >
               Start a project
               <span className="transition-transform group-hover:translate-x-0.5">→</span>
             </a>
             <a
               href="#builds"
-              className="rounded-full border border-line-strong bg-paper px-5 py-3 text-[14px] font-medium text-ink transition-colors hover:border-ink"
+              className="rounded-md border border-line-strong bg-paper px-5 py-3 text-[14px] font-medium text-ink transition-colors hover:border-ink"
             >
               What kind of site do you need?
             </a>
@@ -152,11 +141,6 @@ export default function Hero() {
                   />
                 </div>
               </BrowserFrame>
-              <span
-                className={`absolute -top-3 right-4 rounded-full px-2.5 py-1 font-mono text-[10.5px] font-medium shadow-sm ${w.tagClass}`}
-              >
-                {w.tag}
-              </span>
             </div>
           ))}
         </div>
@@ -164,7 +148,7 @@ export default function Hero() {
 
       <div className="relative mx-auto max-w-6xl px-6 pb-14">
         <dl
-          className="fade-up grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-4"
+          className="fade-up grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-4"
           style={{ animationDelay: "0.9s" }}
         >
           {FACTS.map((fact) => (

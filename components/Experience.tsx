@@ -78,7 +78,7 @@ export default function Experience() {
             >
               <span
                 className={`absolute -left-8 top-1.5 h-[11px] w-[11px] rounded-full border-2 sm:left-[calc(11.5rem-5px)] ${
-                  job.current ? "border-lime bg-lime shadow-[0_0_0_5px_rgba(149,191,71,0.2)]" : "border-white/40 bg-ink"
+                  job.current ? "border-lime bg-lime" : "border-white/40 bg-ink"
                 }`}
                 aria-hidden
               />
@@ -95,13 +95,7 @@ export default function Experience() {
                   {job.company} · {job.location}
                 </p>
                 <p className="mt-3 max-w-2xl text-[14.5px] leading-[1.7] text-white/75">{job.body}</p>
-                <ul className="mt-4 flex flex-wrap gap-1.5">
-                  {job.tags.map((tag) => (
-                    <li key={tag} className="rounded-md border border-white/12 bg-white/5 px-2 py-0.5 font-mono text-[11.5px] text-white/60">
-                      {tag}
-                    </li>
-                  ))}
-                </ul>
+                <p className="mt-4 font-mono text-[12px] text-white/45">{job.tags.join(" · ")}</p>
               </div>
             </Reveal>
           ))}

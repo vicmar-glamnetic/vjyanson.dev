@@ -76,7 +76,7 @@ export default function Work() {
     <section id="work" className="border-b border-line bg-paper px-6 py-20 sm:py-28">
       <div className="mx-auto max-w-6xl">
         <Reveal>
-          <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-brand">Selected work</p>
+          <p className="text-[14px] font-medium text-brand">Selected work</p>
           <h2 className="mt-2.5 max-w-3xl font-display text-[2.1rem] font-semibold leading-[1.08] tracking-[-0.03em] sm:text-[2.9rem]">
             Stores and sites I&apos;ve shipped
           </h2>
@@ -120,15 +120,7 @@ export default function Work() {
                   <span className="font-mono text-[12px] text-ink-3">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span
-                    className={`rounded-full px-2.5 py-0.5 font-mono text-[11px] font-medium ${
-                      p.platform === "WordPress"
-                        ? "bg-wp/10 text-wp"
-                        : "bg-brand-tint text-brand"
-                    }`}
-                  >
-                    {p.platform}
-                  </span>
+                  <span className="text-[13px] font-medium text-ink-2">{p.platform}</span>
                 </div>
                 <h3 className="mt-3 font-display text-[1.9rem] font-semibold tracking-[-0.025em]">
                   {p.name}
@@ -141,13 +133,7 @@ export default function Work() {
                     <p key={para.slice(0, 24)}>{para}</p>
                   ))}
                 </div>
-                <ul className="mt-5 flex flex-wrap gap-1.5">
-                  {p.tags.map((tag) => (
-                    <li key={tag} className="rounded-md border border-line bg-canvas px-2 py-0.5 font-mono text-[11.5px] text-ink-3">
-                      {tag}
-                    </li>
-                  ))}
-                </ul>
+                <p className="mt-5 font-mono text-[12px] text-ink-3">{p.tags.join(" · ")}</p>
                 <a
                   href={p.url}
                   target="_blank"

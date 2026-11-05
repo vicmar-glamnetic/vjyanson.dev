@@ -32,15 +32,15 @@ export default function Gallery() {
           </p>
         </div>
 
-        <div role="group" aria-label="Filter by platform" className="flex gap-1 rounded-full border border-line bg-canvas p-1">
+        <div role="group" aria-label="Filter by platform" className="flex gap-5">
           {FILTERS.map((f) => (
             <button
               key={f}
               type="button"
               aria-pressed={filter === f}
               onClick={() => setFilter(f)}
-              className={`rounded-full px-3.5 py-1.5 text-[13px] transition-colors ${
-                filter === f ? "bg-ink text-white" : "text-ink-2 hover:text-ink"
+              className={`border-b-2 pb-1 text-[14px] transition-colors ${
+                filter === f ? "border-ink text-ink" : "border-transparent text-ink-3 hover:text-ink"
               }`}
             >
               {f}
@@ -58,7 +58,7 @@ export default function Gallery() {
             style={{ animationDelay: `${Math.min(i, 9) * 45}ms` }}
           >
             <a href={site.url} target="_blank" rel="noreferrer" className="group block">
-              <div className="relative aspect-[16/10] overflow-hidden rounded-lg border border-line bg-canvas">
+              <div className="relative aspect-[16/10] overflow-hidden rounded-md border border-line bg-canvas">
                 {site.shot ? (
                   <Image
                     src={shotSrc(site.shot)}
@@ -77,11 +77,6 @@ export default function Gallery() {
                   </div>
                 )}
                 <span className="absolute inset-0 bg-ink/0 transition-colors duration-300 group-hover:bg-ink/10" />
-                <span className="absolute bottom-3 right-3 grid h-8 w-8 translate-y-2 place-items-center rounded-full bg-paper text-ink opacity-0 shadow transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden>
-                    <path d="M3 9L9 3M9 3H4.2M9 3v4.8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </span>
               </div>
               <div className="mt-3 flex items-start justify-between gap-3">
                 <div className="min-w-0">
@@ -92,13 +87,7 @@ export default function Gallery() {
                     {site.sector} · {domainOf(site.url)}
                   </p>
                 </div>
-                <span
-                  className={`mt-0.5 shrink-0 rounded px-1.5 py-0.5 font-mono text-[10.5px] ${
-                    site.platform === "Shopify" ? "bg-brand-tint text-brand" : "bg-wp/10 text-wp"
-                  }`}
-                >
-                  {site.platform}
-                </span>
+                <span className="mt-0.5 shrink-0 text-[12.5px] text-ink-3">{site.platform}</span>
               </div>
             </a>
           </li>

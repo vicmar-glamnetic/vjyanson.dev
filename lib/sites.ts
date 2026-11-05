@@ -25,7 +25,6 @@ export const SITES: Site[] = [
   { name: "Critter Concepts", url: "https://critterconcepts.com", platform: "Shopify", sector: "Pet products", shot: "critter-concepts" },
   { name: "DCB Worldwide", url: "https://dcbworldwide.com", platform: "Shopify", sector: "Apparel", shot: "dcb-worldwide" },
   { name: "Moken Vision", url: "https://mokenvision.myshopify.com", platform: "Shopify", sector: "Eyewear", shot: "moken-vision" },
-  { name: "My Work Supply", url: "https://myworksupply.com", platform: "Shopify", sector: "Workplace supplies" },
   { name: "Jessica Rich", url: "https://jessicarich.com", platform: "Shopify", sector: "Footwear", shot: "jessica-rich" },
   { name: "Macklowe Gallery", url: "https://www.macklowegallery.com", platform: "Shopify", sector: "Fine jewellery", shot: "macklowe-gallery" },
   { name: "Vanity Makeup", url: "https://vanitymakeup.com", platform: "Shopify", sector: "Beauty education", shot: "vanity-makeup" },

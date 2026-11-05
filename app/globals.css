@@ -91,13 +91,11 @@ body {
   }
 }
 
-/* Hero browser windows drop into place, then idle-float slightly out of phase */
+/* Hero browser windows drop into place */
 .window-in {
   opacity: 0;
-  animation:
-    window-in 1s cubic-bezier(0.22, 1, 0.36, 1) forwards,
-    float 7s ease-in-out infinite;
-  animation-delay: var(--d, 0s), calc(var(--d, 0s) + 1s);
+  animation: window-in 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: var(--d, 0s);
 }
 @keyframes window-in {
   from {
@@ -107,15 +105,6 @@ body {
   to {
     opacity: 1;
     translate: 0 0;
-  }
-}
-@keyframes float {
-  0%,
-  100% {
-    translate: 0 0;
-  }
-  50% {
-    translate: 0 -8px;
   }
 }
 
@@ -226,12 +215,6 @@ body {
   }
 }
 
-/* Subtle dot grid used behind the hero */
-.dot-grid {
-  background-image: radial-gradient(var(--color-line-strong) 1px, transparent 1px);
-  background-size: 22px 22px;
-  mask-image: radial-gradient(ellipse at 70% 40%, #000 20%, transparent 70%);
-}
 
 @media (prefers-reduced-motion: reduce) {
   html {

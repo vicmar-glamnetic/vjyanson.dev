@@ -41,7 +41,7 @@ export default function Approach() {
               delay={(i % 2) * 70}
               className="border-t border-line pt-5"
             >
-              <p className="font-mono text-[12px] text-ink-3">
+              <p className="font-display text-[15px] font-semibold text-brand">
                 {String(i + 1).padStart(2, "0")}
               </p>
               <h3 className="mt-2 font-display text-[18px] font-semibold tracking-tight">

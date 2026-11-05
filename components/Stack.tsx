@@ -78,16 +78,9 @@ export default function Stack() {
               <h3 className="font-display text-[16px] font-semibold tracking-tight">
                 {group.title}
               </h3>
-              <ul className="flex flex-wrap gap-x-2 gap-y-1.5">
-                {group.items.map((item) => (
-                  <li
-                    key={item}
-                    className="rounded-md border border-line bg-canvas px-2 py-0.5 font-mono text-[11.5px] text-ink-2 transition-colors hover:border-brand hover:bg-brand-tint hover:text-brand"
-                  >
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              <p className="text-[14.5px] leading-[1.75] text-ink-2">
+                {group.items.join(", ")}
+              </p>
             </Reveal>
           ))}
         </div>
