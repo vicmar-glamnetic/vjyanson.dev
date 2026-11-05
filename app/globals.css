@@ -282,38 +282,6 @@ body {
   clip-path: inset(-80px -80px -80px -80px round 0);
 }
 
-/* ---------- Hero windows "load" their page ---------- */
-.load-bar {
-  position: absolute;
-  inset: 0 auto auto 0;
-  z-index: 3;
-  height: 2px;
-  width: 0;
-  background: var(--color-brand);
-  animation: load-bar 1.1s calc(var(--d, 0s) + 0.35s) cubic-bezier(0.3, 0.6, 0.4, 1) forwards;
-}
-@keyframes load-bar {
-  0% { width: 0; opacity: 1; }
-  85% { width: 100%; opacity: 1; }
-  100% { width: 100%; opacity: 0; }
-}
-.load-in {
-  opacity: 0;
-  animation: load-in 0.7s calc(var(--d, 0s) + 1.2s) ease-out forwards;
-}
-@keyframes load-in {
-  from { opacity: 0; filter: blur(6px); }
-  to { opacity: 1; filter: none; }
-}
-.shimmer {
-  background: linear-gradient(90deg, #ecebe6 0%, #f6f5f1 50%, #ecebe6 100%);
-  background-size: 200% 100%;
-  animation: shimmer 1.2s linear infinite;
-}
-@keyframes shimmer {
-  to { background-position: -200% 0; }
-}
-
 /* ---------- Logo draws itself ---------- */
 .logo-draw path {
   stroke-dasharray: 1;
@@ -333,7 +301,6 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .words .w > span { transform: none; }
   .wipe { clip-path: none; }
-  .load-in { opacity: 1; filter: none; }
   .logo-draw path { stroke-dashoffset: 0; }
 }
 
@@ -407,4 +374,21 @@ body {
   .words-anim .w > span, .device-in { animation: none; }
   .check-draw path { stroke-dashoffset: 0; }
   .focus-scroll, .scroll-x { animation: none; }
+}
+
+/* ---------- Hero screenshot wall ---------- */
+.wall-col {
+  animation: wall-up var(--speed, 60s) linear infinite;
+}
+.wall-col[data-down] {
+  animation-direction: reverse;
+}
+.wall:hover .wall-col {
+  animation-play-state: paused;
+}
+@keyframes wall-up {
+  to { transform: translateY(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wall-col { animation: none; }
 }

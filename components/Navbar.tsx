@@ -14,10 +14,16 @@ const LINKS = [
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  // True while the header sits over the dark hero banner.
+  const [overHero, setOverHero] = useState(true);
   const [current, setCurrent] = useState<string | null>(null);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 8);
+      const hero = document.getElementById("top");
+      setOverHero(!!hero && window.scrollY < hero.offsetHeight - 57);
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
 
@@ -46,17 +52,21 @@ export default function Navbar() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
+  const dark = overHero && !open;
+
   return (
     <header
       className={`sticky top-0 z-50 transition-[background-color,border-color] duration-300 ${
-        scrolled || open
-          ? "border-b border-line bg-paper/92 backdrop-blur-md"
-          : "border-b border-transparent bg-paper"
+        dark
+          ? "border-b border-white/10 bg-ink/90 text-white backdrop-blur-md"
+          : scrolled || open
+            ? "border-b border-line bg-paper/92 backdrop-blur-md"
+            : "border-b border-transparent bg-paper"
       }`}
     >
       <nav className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-6 py-3.5">
         <a href="#top" aria-label="Vicmar Yanson — back to top">
-          <Logo />
+          <Logo dark={dark} />
         </a>
 
         <div className="hidden items-center gap-8 md:flex">
@@ -70,8 +80,10 @@ export default function Navbar() {
                     aria-current={on ? "true" : undefined}
                     className={`relative py-1 text-[14px] transition-colors after:absolute after:-bottom-0.5 after:left-0 after:h-[2px] after:w-full after:origin-left after:bg-brand after:transition-transform after:duration-300 ${
                       on
-                        ? "text-ink after:scale-x-100"
-                        : "text-ink-2 after:scale-x-0 hover:text-ink hover:after:scale-x-100"
+                        ? `${dark ? "text-white" : "text-ink"} after:scale-x-100`
+                        : dark
+                          ? "text-white/70 after:scale-x-0 after:bg-lime hover:text-white hover:after:scale-x-100"
+                          : "text-ink-2 after:scale-x-0 hover:text-ink hover:after:scale-x-100"
                     }`}
                   >
                     {link.label}
@@ -81,15 +93,17 @@ export default function Navbar() {
             })}
           </ul>
 
-          <span className="hidden h-5 w-px bg-line-strong lg:block" aria-hidden />
+          <span className={`hidden h-5 w-px lg:block ${dark ? "bg-white/20" : "bg-line-strong"}`} aria-hidden />
 
-          <p className="hidden text-[13px] text-ink-3 lg:block">
-            Bacolod <LocalTime className="text-ink-2" />
+          <p className={`hidden text-[13px] lg:block ${dark ? "text-white/45" : "text-ink-3"}`}>
+            Bacolod <LocalTime className={dark ? "text-white/80" : "text-ink-2"} />
           </p>
 
           <a
             href="#contact"
-            className="group inline-flex items-center gap-1.5 rounded-md bg-ink px-4 py-2 text-[14px] font-medium text-white transition-colors hover:bg-brand"
+            className={`group inline-flex items-center gap-1.5 rounded-md px-4 py-2 text-[14px] font-medium transition-colors ${
+              dark ? "bg-lime text-ink hover:bg-white" : "bg-ink text-white hover:bg-brand"
+            }`}
           >
             Contact
             <span className="transition-transform group-hover:translate-x-0.5">→</span>
@@ -101,7 +115,7 @@ export default function Navbar() {
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-label="Toggle menu"
-          className="-mr-1 p-1 text-ink md:hidden"
+          className={`-mr-1 p-1 md:hidden ${dark ? "text-white" : "text-ink"}`}
         >
           <svg width="22" height="22" viewBox="0 0 20 20" fill="none" aria-hidden>
             {open ? (

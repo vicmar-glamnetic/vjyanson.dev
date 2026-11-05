@@ -14,7 +14,7 @@ export default function Footer() {
       <div className="mx-auto max-w-6xl">
         <Reveal className="flex flex-wrap items-end justify-between gap-8 border-b border-white/10 pb-12">
           <div className="flex items-center gap-5">
-            <LogoMark size={72} draw="view" className="text-white" />
+            <LogoMark size={72} draw="view" stem="var(--color-lime)" className="text-white" />
             <p className="words font-display text-[2.2rem] font-semibold leading-none tracking-[-0.035em] sm:text-[3.4rem]">
               <SplitWords text="Vicmar Yanson" />
             </p>
