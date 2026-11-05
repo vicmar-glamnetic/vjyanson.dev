@@ -31,7 +31,7 @@ const TYPES: WebsiteType[] = [
     bestFor: "Brands selling physical products direct to customers.",
     includes: ["Custom OS 2.0 theme", "Product & collection templates", "Cart upsells", "Reviews, email & analytics"],
     bring: "Your products (or a spreadsheet of them), brand assets, and two or three stores you like.",
-    example: { name: "Glamnetic", url: "glamnetic.com", slug: "glamnetic", mobile: "glamnetic" },
+    example: { name: "INH Hair", url: "inhhair.com", slug: "inh-hair", mobile: "inh-hair" },
   },
   {
     key: "plus",

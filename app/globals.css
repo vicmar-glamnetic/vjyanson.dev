@@ -194,6 +194,13 @@ body {
     animation: drift linear both;
     animation-timeline: view();
   }
+  /* Hero wall drifts on desktop only — on phones it is a top band */
+  @media (min-width: 1024px) {
+    .hero-wall {
+      animation: drift linear both;
+      animation-timeline: view();
+    }
+  }
 }
 @keyframes grow {
   from {
