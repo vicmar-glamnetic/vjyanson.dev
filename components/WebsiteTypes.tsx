@@ -125,6 +125,46 @@ export default function WebsiteTypes() {
   const [paused, setPaused] = useState(false);
   const ref = useRef<HTMLElement>(null);
   const tabsRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  // Scroll mode: the section pins and scrolling steps through 01 → 05.
+  // Falls back to clickable tabs + autoplay on very short screens.
+  const [scrollMode, setScrollMode] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-height: 700px)");
+    const apply = () => setScrollMode(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!scrollMode || !el) return;
+    let raf = 0;
+    const update = () => {
+      const r = el.getBoundingClientRect();
+      const total = r.height - window.innerHeight;
+      const p = Math.min(1, Math.max(0, -r.top / (total || 1)));
+      const pos = p * TYPES.length;
+      const idx = Math.min(TYPES.length - 1, Math.floor(pos));
+      el.style.setProperty("--p", p.toFixed(4));
+      el.style.setProperty("--seg", Math.min(1, Math.max(0, (pos - idx) * 1.15 - 0.05)).toFixed(4));
+      setActive(idx);
+    };
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      cancelAnimationFrame(raf);
+    };
+  }, [scrollMode]);
 
   useEffect(() => {
     const el = ref.current;
@@ -134,7 +174,7 @@ export default function WebsiteTypes() {
     return () => io.disconnect();
   }, []);
 
-  const running = auto && inView && !paused;
+  const running = !scrollMode && auto && inView && !paused;
 
   useEffect(() => {
     if (!running) return;
@@ -153,8 +193,17 @@ export default function WebsiteTypes() {
   }, [active]);
 
   const choose = (i: number) => {
+    const next = (i + TYPES.length) % TYPES.length;
+    const el = trackRef.current;
+    if (scrollMode && el) {
+      // Jump the page to that type's slice of the pinned scroll.
+      const top = el.getBoundingClientRect().top + window.scrollY;
+      const total = el.offsetHeight - window.innerHeight;
+      window.scrollTo({ top: top + ((next + 0.08) / TYPES.length) * total, behavior: "smooth" });
+      return;
+    }
     setAuto(false);
-    setActive((i + TYPES.length) % TYPES.length);
+    setActive(next);
   };
 
   const onKeyDown = (e: React.KeyboardEvent) => {
@@ -168,13 +217,22 @@ export default function WebsiteTypes() {
   };
 
   return (
-    <section id="builds" ref={ref} className="overflow-hidden border-b border-line bg-canvas px-6 py-20 sm:py-28">
+    <section id="builds" ref={ref} className="border-b border-line bg-canvas px-6 pt-20 sm:pt-28">
       <div className="mx-auto max-w-6xl">
         <SectionHeading
           eyebrow="Website types"
           title="Which kind of site do you need?"
-          lead="Most projects I take on are one of these five. Use it as a guide — pick the closest one to see what it usually includes, what to have ready, and a live example."
+          lead="Most projects I take on are one of these five. Keep scrolling to go through them — or jump to one — to see what it usually includes, what to have ready, and a live example."
         />
+      </div>
+
+      <div
+        ref={trackRef}
+        className={scrollMode ? "relative" : "pb-20 sm:pb-28"}
+        style={scrollMode ? { height: `calc(${TYPES.length} * 90vh + 100vh)` } : undefined}
+      >
+      <div className={scrollMode ? "sticky top-[57px] -mx-6 flex h-[calc(100vh-57px)] flex-col justify-center overflow-hidden px-6" : ""}>
+      <div className="mx-auto w-full max-w-6xl">
 
         {/* Tab bar */}
         <div
@@ -182,7 +240,7 @@ export default function WebsiteTypes() {
           role="tablist"
           aria-label="Website types"
           onKeyDown={onKeyDown}
-          className="-mx-6 mt-12 flex snap-x gap-px overflow-x-auto px-6 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-5 lg:overflow-visible lg:px-0"
+          className={`-mx-6 ${scrollMode ? "mt-0" : "mt-12"} flex snap-x scroll-px-6 gap-px overflow-x-auto px-6 [scrollbar-width:none] lg:mx-0 lg:grid lg:grid-cols-5 lg:overflow-visible lg:px-0`}
         >
           {TYPES.map((t, i) => {
             const on = i === active;
@@ -196,11 +254,18 @@ export default function WebsiteTypes() {
                 aria-controls="type-panel"
                 tabIndex={on ? 0 : -1}
                 onClick={() => choose(i)}
-                className={`group relative min-w-[11.5rem] shrink-0 snap-start pb-4 pr-4 pt-5 text-left transition-colors lg:min-w-0 ${
+                className={`group relative min-w-[11.5rem] shrink-0 snap-start pr-4 ${scrollMode ? "pb-3 pt-4" : "pb-4 pt-5"} text-left transition-colors lg:min-w-0 ${
                   on ? "text-ink" : "text-ink-3 hover:text-ink"
                 }`}
               >
                 <span className="absolute inset-x-0 top-0 h-[2px] bg-line-strong" aria-hidden />
+                {scrollMode ? (
+                  <span
+                    className="absolute inset-x-0 top-0 h-[2px] origin-left bg-ink"
+                    style={{ transform: `scaleX(clamp(0, calc(var(--p, 0) * ${TYPES.length} - ${i}), 1))` }}
+                    aria-hidden
+                  />
+                ) : (
                 <span
                   key={on && running ? `run-${active}` : `idle-${on}`}
                   className={`absolute inset-x-0 top-0 h-[2px] origin-left bg-ink ${
@@ -209,6 +274,7 @@ export default function WebsiteTypes() {
                   style={on && running ? ({ "--dur": `${DURATION}ms` } as React.CSSProperties) : undefined}
                   aria-hidden
                 />
+                )}
                 <span className={`block font-display text-[13px] font-semibold transition-colors ${on ? "text-brand" : ""}`}>
                   0{i + 1}
                 </span>
@@ -229,29 +295,29 @@ export default function WebsiteTypes() {
           key={type.key}
           onMouseEnter={() => setPaused(true)}
           onMouseLeave={() => setPaused(false)}
-          className="mt-10 grid items-center gap-12 lg:grid-cols-[0.92fr_1.08fr] lg:gap-14"
+          className={`grid items-center lg:grid-cols-[0.92fr_1.08fr] lg:gap-14 ${scrollMode ? "mt-5 gap-6 lg:mt-8" : "mt-10 gap-12"}`}
         >
-          <div>
+          <div className="min-w-0">
             <div className="flex items-baseline gap-4">
-              <span className="device-in font-display text-[4.5rem] font-semibold leading-none tracking-[-0.05em] text-line-strong sm:text-[6rem]">
+              <span className={`device-in font-display font-semibold leading-none tracking-[-0.05em] text-line-strong ${scrollMode ? "text-[2.8rem] sm:text-[4.5rem]" : "text-[4.5rem] sm:text-[6rem]"}`}>
                 0{active + 1}
               </span>
               <span className="fade-up text-[13px] text-ink-3" style={{ animationDelay: "0.2s" }}>
                 {type.platform}
               </span>
             </div>
-            <h3 className="words-anim mt-2 font-display text-[2rem] font-semibold leading-[1.05] tracking-[-0.03em] sm:text-[2.6rem]">
+            <h3 className={`words-anim mt-2 font-display font-semibold leading-[1.05] tracking-[-0.03em] ${scrollMode ? "text-[1.7rem] sm:text-[2.3rem]" : "text-[2rem] sm:text-[2.6rem]"}`}>
               <SplitWords text={type.title} />
             </h3>
-            <p className="fade-up mt-4 max-w-lg text-[16px] leading-[1.65] text-ink-2" style={{ animationDelay: "0.15s" }}>
+            <p className={`fade-up max-w-lg leading-[1.6] text-ink-2 ${scrollMode ? "mt-3 text-[14.5px] sm:text-[15.5px]" : "mt-4 text-[16px]"}`} style={{ animationDelay: "0.15s" }}>
               {type.summary}
             </p>
 
-            <div className="mt-8 grid gap-7 border-t border-line pt-7 sm:grid-cols-2">
+            <div className={`grid gap-7 border-t border-line sm:grid-cols-2 ${scrollMode ? "mt-5 hidden pt-5 sm:grid" : "mt-8 pt-7"}`}>
               <div className="fade-up" style={{ animationDelay: "0.25s" }}>
                 <p className="text-[13px] font-semibold text-ink">Best for</p>
                 <p className="mt-1.5 text-[14.5px] leading-[1.6] text-ink-2">{type.bestFor}</p>
-                <p className="mt-5 text-[13px] font-semibold text-ink">Have ready</p>
+                <p className="mt-4 text-[13px] font-semibold text-ink">Have ready</p>
                 <p className="mt-1.5 text-[14.5px] leading-[1.6] text-ink-2">{type.bring}</p>
               </div>
               <div>
@@ -274,7 +340,7 @@ export default function WebsiteTypes() {
               </div>
             </div>
 
-            <div className="fade-up mt-8 flex flex-wrap items-center gap-x-6 gap-y-3" style={{ animationDelay: "0.85s" }}>
+            <div className={`fade-up flex flex-wrap items-center gap-x-6 gap-y-3 ${scrollMode ? "mt-5 lg:mt-6" : "mt-8"}`} style={{ animationDelay: "0.85s" }}>
               <a
                 href="#contact"
                 onClick={pickForContact}
@@ -297,12 +363,15 @@ export default function WebsiteTypes() {
           </div>
 
           {/* Desktop + phone mockups, both panning down the real page */}
-          <div className="relative pb-10 pr-[14%] sm:pb-14">
+          <div className={`relative min-w-0 pr-[14%] ${scrollMode ? "pb-8 sm:pb-12" : "pb-10 sm:pb-14"}`}>
             <div className="device-in" style={{ "--dl": "0.05s" } as React.CSSProperties}>
               <BrowserFrame url={type.example.url} dark={!type.example.slug}>
                 <div
-                  className="page-scroll relative h-(--frame-h) overflow-hidden [--frame-h:230px] sm:[--frame-h:340px] lg:[--frame-h:380px]"
-                  data-auto={type.example.slug ? "" : undefined}
+                  className={`page-scroll relative h-(--frame-h) overflow-hidden ${
+                    scrollMode ? "[--frame-h:min(170px,22vh)] sm:[--frame-h:min(320px,36vh)]" : "[--frame-h:230px] sm:[--frame-h:340px] lg:[--frame-h:380px]"
+                  }`}
+                  data-auto={!scrollMode && type.example.slug ? "" : undefined}
+                  data-linked={scrollMode && type.example.slug ? "" : undefined}
                   style={{ "--dur": `${DURATION - 2000}ms` } as React.CSSProperties}
                 >
                   {type.example.slug ? (
@@ -322,13 +391,14 @@ export default function WebsiteTypes() {
             </div>
 
             <div
-              className="device-in absolute bottom-0 right-0 w-[30%] min-w-[110px] max-w-[180px]"
+              className={`device-in absolute bottom-0 right-0 w-[30%] ${scrollMode ? "min-w-[84px] max-w-[150px]" : "min-w-[110px] max-w-[180px]"}`}
               style={{ "--dl": "0.3s" } as React.CSSProperties}
             >
               <div className="rounded-[1.6rem] bg-ink p-[5px] shadow-[0_30px_60px_-25px_rgba(0,0,0,0.55)]">
                 <div
                   className="page-scroll relative aspect-[9/19] overflow-hidden rounded-[1.3rem] bg-paper"
-                  data-auto=""
+                  data-auto={scrollMode ? undefined : ""}
+                  data-linked={scrollMode ? "" : undefined}
                   ref={(el) => {
                     if (el) el.style.setProperty("--frame-h", `${el.clientHeight}px`);
                   }}
@@ -348,6 +418,8 @@ export default function WebsiteTypes() {
             </div>
           </div>
         </div>
+      </div>
+      </div>
       </div>
     </section>
   );

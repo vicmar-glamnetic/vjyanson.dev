@@ -137,6 +137,11 @@ body {
 .group:focus-visible .page-scroll img {
   transform: translateY(calc(-100% + var(--frame-h, 420px)));
 }
+/* Pan tied to scroll position (website types in scroll mode) */
+.page-scroll[data-linked] img {
+  transform: translateY(calc((-100% + var(--frame-h, 420px)) * var(--seg, 0)));
+  transition: transform 0.25s linear;
+}
 /* Auto-pan once on mount (website-type switcher) */
 .page-scroll[data-auto] img {
   animation: page-pan var(--dur, 7s) 0.6s cubic-bezier(0.45, 0, 0.55, 1) forwards;
