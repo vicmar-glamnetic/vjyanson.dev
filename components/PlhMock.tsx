@@ -162,7 +162,7 @@ export default function PlhMock({ designed }: { designed: boolean }) {
           </div>
         }
         design={
-          <h4 className={`text-[4.25cqw] font-bold leading-[1.0] tracking-[-0.025em] text-[#151515] ${serif}`}>
+          <h4 className={`text-[4.25cqw] font-bold leading-none tracking-tight text-[#151515] ${serif}`}>
             This is What
             <br />
             Real Herbal Medicine
@@ -199,7 +199,7 @@ export default function PlhMock({ designed }: { designed: boolean }) {
         wire={<div className={`h-full w-full rounded-full ${wireBox}`} />}
         design={
           <div className="flex h-full w-full items-center gap-[3%] rounded-full border-[0.2cqw] border-[#151515] bg-white px-[5%] shadow-[0.3cqw_0.3cqw_0_#151515]">
-            <span className="text-[1.15cqw] tracking-[0.05em] text-[#b8862b]">★★★★★</span>
+            <span className="text-[1.15cqw] tracking-wider text-[#b8862b]">★★★★★</span>
             <b className="text-[1.15cqw] text-[#151515]">4.9</b>
             <span className={`truncate text-[0.95cqw] italic text-[#7a3b3b] ${serif}`}>Join the women who chose real herbal medicine</span>
           </div>
@@ -310,7 +310,7 @@ export default function PlhMock({ designed }: { designed: boolean }) {
             style={{ left: "8%", right: "8%", top: "80%", height: "10%" }}
             wire={<div className={`h-[70%] w-[85%] rounded-full ${wireBox}`} />}
             design={
-              <div className="flex h-[70%] w-[85%] items-center rounded-full border border-[#151515] bg-white/60 px-[6%] text-[0.8cqw] font-semibold tracking-[0.05em] text-[#2b2b2b]">
+              <div className="flex h-[70%] w-[85%] items-center rounded-full border border-[#151515] bg-white/60 px-[6%] text-[0.8cqw] font-semibold tracking-wider text-[#2b2b2b]">
                 SUPPORTS A CALM NERVOUS SYSTEM
               </div>
             }
@@ -330,7 +330,7 @@ export default function PlhMock({ designed }: { designed: boolean }) {
               <div className="text-[0.8cqw] font-semibold tracking-[0.08em] text-[#7d1f2c]">SAVE UP TO 40%</div>
               <div className={`text-[1.35cqw] font-bold text-[#151515] ${serif}`}>Pick the tinctures your body is asking for</div>
             </div>
-            <div className="rounded-[0.9cqw] border-[0.2cqw] border-[#151515] bg-[#f0d36c] px-[3%] py-[1.2%] text-[0.85cqw] font-bold tracking-[0.05em] text-[#151515]">
+            <div className="rounded-[0.9cqw] border-[0.2cqw] border-[#151515] bg-[#f0d36c] px-[3%] py-[1.2%] text-[0.85cqw] font-bold tracking-wider text-[#151515]">
               BUILD YOUR BUNDLE →
             </div>
           </div>
@@ -342,7 +342,7 @@ export default function PlhMock({ designed }: { designed: boolean }) {
         style={at(768, 563, 104, 25)}
         wire={<div className={`h-full w-full rounded-full ${wireBox}`} />}
         design={
-          <div className="grid h-full w-full place-items-center rounded-full bg-[#f0d36c] text-[0.85cqw] font-bold tracking-[0.05em] text-[#151515]">
+          <div className="grid h-full w-full place-items-center rounded-full bg-[#f0d36c] text-[0.85cqw] font-bold tracking-wider text-[#151515]">
             SHOP SLEEPY →
           </div>
         }
