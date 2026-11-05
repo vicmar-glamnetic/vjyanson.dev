@@ -25,11 +25,6 @@ export default function Hero() {
 
       <div className="relative mx-auto flex max-w-6xl flex-col px-6 pb-[400px] pt-16 sm:pb-[480px] sm:pt-24 lg:min-h-[calc(100svh-57px)] lg:justify-center lg:pb-10 lg:pt-12">
         <div className="max-w-[50rem]">
-          <p className="fade-up mb-7 flex items-center gap-2.5 text-[14px] text-white/60" style={{ animationDelay: "0.05s" }}>
-            <span className="h-2 w-2 bg-lime" aria-hidden />
-            Available for freelance &amp; contract work — Bacolod City, PH
-          </p>
-
           <h1 className="font-display text-[3rem] font-semibold leading-[0.98] tracking-[-0.045em] sm:text-[4.6rem] lg:text-[5.1rem]">
             <span className="line-mask">
               <span style={{ animationDelay: "0.1s" }}>I build websites</span>
