@@ -64,25 +64,28 @@ const ROWS = [
   ["React", "WooCommerce", "Tailwind", "Metafields", "JavaScript", "Figma"],
 ];
 
-function BigRow({ words, from, to }: { words: string[]; from: string; to: string }) {
+function BigRow({ words, from, to, reverse }: { words: string[]; from: string; to: string; reverse?: boolean }) {
   return (
-    <div
-      className="scroll-x flex w-max items-center gap-6 whitespace-nowrap sm:gap-10"
-      style={{ "--from": from, "--to": to } as React.CSSProperties}
-      aria-hidden
-    >
-      {[...words, ...words].map((w, i) => (
-        <span key={i} className="flex items-center gap-6 sm:gap-10">
-          <span
-            className={`font-display text-[3.2rem] font-semibold leading-none tracking-[-0.04em] sm:text-[5.5rem] ${
-              i % 2 ? "text-outline" : "text-ink"
-            }`}
-          >
-            {w}
+    // Outer layer drifts with page scroll; inner track loops on its own.
+    <div className="scroll-x w-max" style={{ "--from": from, "--to": to } as React.CSSProperties} aria-hidden>
+      <div
+        className="marquee-track whitespace-nowrap"
+        data-reverse={reverse || undefined}
+        style={{ "--speed": `${words.length * 6}s` } as React.CSSProperties}
+      >
+        {[...words, ...words].map((w, i) => (
+          <span key={i} className="flex items-center gap-6 pr-6 sm:gap-10 sm:pr-10">
+            <span
+              className={`font-display text-[3.2rem] font-semibold leading-none tracking-[-0.04em] sm:text-[5.5rem] ${
+                i % 2 ? "text-outline" : "text-ink"
+              }`}
+            >
+              {w}
+            </span>
+            <span className="font-display text-[2rem] text-brand sm:text-[3rem]">/</span>
           </span>
-          <span className="font-display text-[2rem] text-brand sm:text-[3rem]">/</span>
-        </span>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
@@ -99,8 +102,8 @@ export default function Stack() {
       </div>
 
       <div className="mt-14 space-y-3 sm:space-y-5">
-        <BigRow words={ROWS[0]} from="0%" to="-30%" />
-        <BigRow words={ROWS[1]} from="-30%" to="0%" />
+        <BigRow words={ROWS[0]} from="0%" to="-12%" />
+        <BigRow words={ROWS[1]} from="-12%" to="0%" reverse />
       </div>
 
       <div className="mx-auto mt-16 grid max-w-6xl gap-x-10 gap-y-12 px-6 sm:grid-cols-2 lg:grid-cols-4">
