@@ -1,7 +1,9 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import Services from "@/components/Services";
+import Marquee from "@/components/Marquee";
+import WebsiteTypes from "@/components/WebsiteTypes";
 import Work from "@/components/Work";
+import Services from "@/components/Services";
 import Experience from "@/components/Experience";
 import Stack from "@/components/Stack";
 import Approach from "@/components/Approach";
@@ -14,8 +16,10 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
-        <Services />
+        <Marquee />
+        <WebsiteTypes />
         <Work />
+        <Services />
         <Experience />
         <Stack />
         <Approach />

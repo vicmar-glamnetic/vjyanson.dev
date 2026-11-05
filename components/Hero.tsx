@@ -1,158 +1,181 @@
-import Reveal from "./Reveal";
+import Image from "next/image";
+import BrowserFrame from "./BrowserFrame";
+import { SITES, shotSrc } from "@/lib/sites";
+
+const shopifyCount = SITES.filter((s) => s.platform === "Shopify").length;
+const wpCount = SITES.filter((s) => s.platform === "WordPress").length;
 
 const FACTS = [
   { value: "2018", label: "Building for the web since" },
-  { value: "30", label: "Live sites shipped" },
-  { value: "3", label: "Countries worked for" },
+  { value: String(SITES.length), label: "Live sites in the portfolio" },
+  { value: `${shopifyCount} / ${wpCount}`, label: "Shopify / WordPress" },
+  { value: "3", label: "Countries of clients" },
 ];
 
-/* A trimmed-down version of a swatch section I've built more than once. */
-function LiquidSample() {
-  const c = {
-    tag: "text-[#79c0ff]",
-    obj: "text-[#d2a8ff]",
-    str: "text-[#a5d6ff]",
-    dim: "text-[#8b949e]",
-    el: "text-[#7ee787]",
-  };
-
-  return (
-    <div className="overflow-hidden rounded-lg border border-line-strong bg-ink">
-      <div className="flex items-center gap-2 border-b border-white/10 px-4 py-2.5">
-        <span className="h-2 w-2 rounded-full bg-lime" />
-        <span className="font-mono text-[11.5px] text-white/55">
-          sections/product-swatches.liquid
-        </span>
-      </div>
-
-      <pre className="overflow-x-auto px-4 py-4 font-mono text-[11.5px] leading-[1.75] text-white/85">
-        <code>
-          <span className={c.tag}>{"{%- liquid"}</span>
-          {"\n  "}
-          <span className={c.tag}>assign</span> swatches ={" "}
-          <span className={c.obj}>product.metafields.custom.swatches.value</span>
-          {"\n  "}
-          <span className={c.tag}>assign</span> current ={" "}
-          <span className={c.obj}>
-            product.selected_or_first_available_variant
-          </span>
-          {"\n"}
-          <span className={c.tag}>{"-%}"}</span>
-          {"\n\n"}
-          <span className={c.dim}>{"<"}</span>
-          <span className={c.el}>product-swatches</span>{" "}
-          <span className={c.dim}>data-section</span>=
-          <span className={c.str}>{'"{{ section.id }}"'}</span>
-          <span className={c.dim}>{">"}</span>
-          {"\n  "}
-          <span className={c.tag}>{"{%- for swatch in swatches -%}"}</span>
-          {"\n    "}
-          <span className={c.tag}>{"{%- render"}</span>{" "}
-          <span className={c.str}>&apos;swatch-node&apos;</span>, swatch: swatch,
-          current: current <span className={c.tag}>{"-%}"}</span>
-          {"\n  "}
-          <span className={c.tag}>{"{%- endfor -%}"}</span>
-          {"\n"}
-          <span className={c.dim}>{"</"}</span>
-          <span className={c.el}>product-swatches</span>
-          <span className={c.dim}>{">"}</span>
-        </code>
-      </pre>
-    </div>
-  );
-}
+const WINDOWS = [
+  {
+    slug: "inh-hair",
+    url: "inhhair.com",
+    tag: "Shopify Plus",
+    tagClass: "bg-brand text-white",
+    pos: "left-0 top-0 w-[78%] z-10 -rotate-[2.5deg]",
+    d: "0.35s",
+  },
+  {
+    slug: "247-pro-restoration",
+    url: "247prorestoration.com",
+    tag: "WordPress",
+    tagClass: "bg-wp text-white",
+    pos: "right-0 top-[22%] w-[72%] z-20 rotate-[2deg]",
+    d: "0.55s",
+  },
+  {
+    slug: "modern-comfort-builders",
+    url: "moderncomfortbuilders.com",
+    tag: "WordPress",
+    tagClass: "bg-wp text-white",
+    pos: "left-[8%] top-[52%] w-[70%] z-30 -rotate-1",
+    d: "0.75s",
+  },
+];
 
 export default function Hero() {
   return (
-    <section id="top" className="border-b border-line px-6 pb-20 pt-16 sm:pt-24">
-      <div className="mx-auto max-w-5xl">
-        <Reveal>
-          <p className="mb-5 inline-flex items-center gap-2 rounded-full border border-line bg-canvas px-3 py-1 text-[12.5px] text-ink-2">
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full rounded-full bg-brand opacity-60" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand" />
+    <section id="top" className="relative overflow-hidden border-b border-line">
+      <div className="dot-grid pointer-events-none absolute inset-0" aria-hidden />
+
+      <div className="relative mx-auto grid max-w-6xl items-center gap-14 px-6 pb-16 pt-14 sm:pt-20 lg:grid-cols-[1.05fr_1fr] lg:gap-10 lg:pb-24">
+        <div>
+          <p
+            className="fade-up mb-6 inline-flex items-center gap-2 rounded-full border border-line bg-paper px-3 py-1 text-[12.5px] text-ink-2"
+            style={{ animationDelay: "0.05s" }}
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand opacity-50" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-brand" />
             </span>
-            Open to contract and freelance work
+            Taking on freelance & contract work
           </p>
 
-          <h1 className="max-w-3xl text-[2.1rem] font-semibold leading-[1.14] tracking-[-0.022em] sm:text-[2.75rem]">
-            I build Shopify storefronts that hold up in production.
+          <h1 className="font-display text-[2.6rem] font-semibold leading-[1.02] tracking-[-0.035em] sm:text-[3.6rem] lg:text-[4.1rem]">
+            <span className="line-mask">
+              <span style={{ animationDelay: "0.1s" }}>I build websites</span>
+            </span>
+            <span className="line-mask">
+              <span style={{ animationDelay: "0.22s" }}>and online stores</span>
+            </span>
+            <span className="line-mask">
+              <span style={{ animationDelay: "0.34s" }}>
+                that{" "}
+                <span className="relative inline-block text-brand">
+                  hold up.
+                  <svg
+                    className="draw-line absolute -bottom-2 left-0 w-full"
+                    viewBox="0 0 200 14"
+                    fill="none"
+                    preserveAspectRatio="none"
+                    aria-hidden
+                  >
+                    <path
+                      d="M3 9c40-6 90-8 194-3"
+                      stroke="var(--color-lime)"
+                      strokeWidth="5"
+                      strokeLinecap="round"
+                    />
+                  </svg>
+                </span>
+              </span>
+            </span>
           </h1>
-        </Reveal>
 
-        <div className="mt-12 grid items-start gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
-          <Reveal>
-            <div className="space-y-4 text-[15.5px] leading-[1.65] text-ink-2">
-              <p>
-                I&apos;m Vicmar, a Shopify developer based in Bacolod City,
-                Philippines. Since 2019 I&apos;ve worked almost entirely inside
-                Liquid — theme architecture, section and block schemas, cart and
-                checkout logic, and the app integrations that keep a large
-                catalogue coherent once marketing starts editing it.
-              </p>
-              <p>
-                Right now I&apos;m the senior developer on{" "}
-                <a
-                  href="https://inhhair.com"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-ink underline decoration-line-strong underline-offset-[3px] transition-colors hover:decoration-brand"
-                >
-                  INH Hair
-                </a>{" "}
-                and its sister brands at Komboventures in Los Angeles, working
-                across a Shopify Plus stack.
-              </p>
-            </div>
-
-            <div className="mt-8 flex flex-wrap items-center gap-3">
+          <div
+            className="fade-up mt-7 max-w-xl space-y-4 text-[16px] leading-[1.65] text-ink-2"
+            style={{ animationDelay: "0.55s" }}
+          >
+            <p>
+              I&apos;m Vicmar, a web developer in Bacolod City, Philippines.
+              Most of my week is Shopify — Liquid themes, Shopify Plus, and the
+              integrations around them. The rest is WordPress business sites,
+              custom PHP, and React / Next.js front ends like this one.
+            </p>
+            <p>
+              Currently senior developer on{" "}
               <a
-                href="#contact"
-                className="rounded-md bg-brand px-4 py-2.5 text-[14px] font-medium text-white transition-colors hover:bg-brand-dark"
-              >
-                Start a project
-              </a>
-              <a
-                href="#work"
-                className="rounded-md border border-line-strong px-4 py-2.5 text-[14px] font-medium text-ink transition-colors hover:border-ink-3"
-              >
-                See recent work
-              </a>
-              <a
-                href="https://www.linkedin.com/in/vicmar-yanson/"
+                href="https://inhhair.com"
                 target="_blank"
                 rel="noreferrer"
-                className="px-1 text-[14px] text-ink-2 underline decoration-line-strong underline-offset-[3px] transition-colors hover:text-brand"
+                className="text-ink underline decoration-line-strong underline-offset-[3px] transition-colors hover:decoration-brand"
               >
-                LinkedIn
-              </a>
-            </div>
-          </Reveal>
-
-          {/* min-w-0 keeps the scrolling <pre> from widening the grid track */}
-          <Reveal delay={120} className="min-w-0">
-            <LiquidSample />
-            <p className="mt-3 text-[12.5px] leading-relaxed text-ink-3">
-              Metafield-driven swatches, rendered server-side so the variant
-              picker survives a page load without JavaScript.
+                INH Hair
+              </a>{" "}
+              at Komboventures, Los Angeles.
             </p>
-          </Reveal>
+          </div>
+
+          <div
+            className="fade-up mt-8 flex flex-wrap items-center gap-3"
+            style={{ animationDelay: "0.7s" }}
+          >
+            <a
+              href="#contact"
+              className="group inline-flex items-center gap-2 rounded-full bg-ink px-5 py-3 text-[14px] font-medium text-white transition-colors hover:bg-brand"
+            >
+              Start a project
+              <span className="transition-transform group-hover:translate-x-0.5">→</span>
+            </a>
+            <a
+              href="#builds"
+              className="rounded-full border border-line-strong bg-paper px-5 py-3 text-[14px] font-medium text-ink transition-colors hover:border-ink"
+            >
+              What kind of site do you need?
+            </a>
+          </div>
         </div>
 
-        <Reveal delay={200}>
-          <dl className="mt-16 grid grid-cols-3 gap-px overflow-hidden rounded-lg border border-line bg-line">
-            {FACTS.map((fact) => (
-              <div key={fact.label} className="bg-paper px-4 py-5 sm:px-6">
-                <dt className="text-[12.5px] leading-snug text-ink-3">
-                  {fact.label}
-                </dt>
-                <dd className="mt-1 text-[1.6rem] font-semibold tracking-tight tabular-nums">
-                  {fact.value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </Reveal>
+        {/* Overlapping browser windows with real screenshots */}
+        <div className="relative mx-auto aspect-[1/0.92] w-full max-w-[560px]">
+          {WINDOWS.map((w, i) => (
+            <div
+              key={w.slug}
+              className={`window-in absolute ${w.pos}`}
+              style={{ "--d": w.d } as React.CSSProperties}
+            >
+              <BrowserFrame url={w.url}>
+                <div className="relative aspect-[16/10]">
+                  <Image
+                    src={shotSrc(w.slug)}
+                    alt={`${w.url} homepage`}
+                    fill
+                    sizes="(min-width: 1024px) 420px, 75vw"
+                    className="object-cover object-top"
+                    preload={i === 0}
+                  />
+                </div>
+              </BrowserFrame>
+              <span
+                className={`absolute -top-3 right-4 rounded-full px-2.5 py-1 font-mono text-[10.5px] font-medium shadow-sm ${w.tagClass}`}
+              >
+                {w.tag}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="relative mx-auto max-w-6xl px-6 pb-14">
+        <dl
+          className="fade-up grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-4"
+          style={{ animationDelay: "0.9s" }}
+        >
+          {FACTS.map((fact) => (
+            <div key={fact.label} className="bg-paper px-5 py-5">
+              <dt className="text-[12.5px] leading-snug text-ink-3">{fact.label}</dt>
+              <dd className="mt-1 font-display text-[1.9rem] font-semibold tracking-tight tabular-nums">
+                {fact.value}
+              </dd>
+            </div>
+          ))}
+        </dl>
       </div>
     </section>
   );

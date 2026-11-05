@@ -47,19 +47,19 @@ export default function Contact() {
     "w-full rounded-md border border-white/15 bg-white/6 px-3 py-2.5 text-[14.5px] text-white placeholder:text-white/35 outline-none transition-colors focus:border-lime/70 focus:bg-white/10";
 
   return (
-    <section id="contact" className="bg-brand-dark px-6 py-20 text-white sm:py-24">
-      <div className="mx-auto max-w-5xl">
+    <section id="contact" className="bg-brand-dark px-6 py-20 text-white sm:py-28">
+      <div className="mx-auto max-w-6xl">
         <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-20">
           <div>
             <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-lime">
               Contact
             </p>
-            <h2 className="mt-2.5 text-[1.75rem] font-semibold tracking-[-0.02em] sm:text-[2rem]">
-              Tell me about the store
+            <h2 className="mt-2.5 font-display text-[2.1rem] font-semibold leading-[1.08] tracking-[-0.03em] sm:text-[2.9rem]">
+              Tell me about the project
             </h2>
             <p className="mt-3 max-w-md text-[15.5px] leading-[1.65] text-white/70">
-              A theme build, a rebrand, a store that got slow, or a job you
-              cannot get an app to do properly. Send me the details and I&apos;ll
+              A new Shopify store, a WordPress site for your business, a custom
+              build, or an existing site that got slow. Send me the details and I&apos;ll
               tell you honestly whether it&apos;s something I should take on.
             </p>
             <p className="mt-3 max-w-md text-[14px] leading-[1.65] text-white/55">
@@ -162,7 +162,7 @@ export default function Contact() {
                     name="message"
                     required
                     rows={7}
-                    placeholder="Store URL, what needs doing, and roughly when you need it."
+                    placeholder="Your current site (if any), which kind of site you need, and roughly when."
                     value={form.message}
                     onChange={(e) => setForm({ ...form, message: e.target.value })}
                     className={`${field} resize-y`}

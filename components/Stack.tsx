@@ -60,12 +60,12 @@ const LEARNING = ["Hydrogen & Oxygen", "Shopify Functions", "Theme app extension
 
 export default function Stack() {
   return (
-    <section id="stack" className="border-b border-line bg-canvas px-6 py-20 sm:py-24">
-      <div className="mx-auto max-w-5xl">
+    <section id="stack" className="border-b border-line bg-paper px-6 py-20 sm:py-28">
+      <div className="mx-auto max-w-6xl">
         <SectionHeading
           eyebrow="Stack"
-          title="What I work in"
-          lead="The top group is where I spend most weeks. The rest I reach for as the job needs it."
+          title="Tools of the trade"
+          lead="Shopify is where I spend most weeks; the rest I use every month across WordPress and custom builds."
         />
 
         <div className="mt-12 space-y-px overflow-hidden rounded-lg border border-line bg-line">
@@ -75,14 +75,14 @@ export default function Stack() {
               delay={Math.min(i, 3) * 60}
               className="grid gap-x-10 gap-y-3 bg-paper px-6 py-6 sm:grid-cols-[8.5rem_1fr] sm:px-7"
             >
-              <h3 className="text-[14.5px] font-semibold tracking-tight">
+              <h3 className="font-display text-[16px] font-semibold tracking-tight">
                 {group.title}
               </h3>
               <ul className="flex flex-wrap gap-x-2 gap-y-1.5">
                 {group.items.map((item) => (
                   <li
                     key={item}
-                    className="rounded border border-line bg-canvas px-2 py-0.5 font-mono text-[11.5px] text-ink-2"
+                    className="rounded-md border border-line bg-canvas px-2 py-0.5 font-mono text-[11.5px] text-ink-2 transition-colors hover:border-brand hover:bg-brand-tint hover:text-brand"
                   >
                     {item}
                   </li>

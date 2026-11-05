@@ -1,210 +1,168 @@
+import Image from "next/image";
+import BrowserFrame from "./BrowserFrame";
 import Reveal from "./Reveal";
-import SectionHeading from "./SectionHeading";
+import Gallery from "./Gallery";
+import { shotSrc } from "@/lib/sites";
 
 const FEATURED = [
   {
     name: "INH Hair",
+    slug: "inh-hair",
     url: "https://inhhair.com",
     domain: "inhhair.com",
+    platform: "Shopify Plus",
     sector: "Hair extensions · DTC",
     period: "2023 — present",
-    role: "Senior Shopify Developer",
     body: [
       "Led the product page rebrand across the catalogue. Rather than one cutover, I rebuilt the PDP as schema-driven sections so the new brand system could roll out template by template and be reverted per template if something looked wrong in production.",
-      "Built out the Liquid templates behind it and moved product, variant, and inventory reads onto the Admin and Storefront GraphQL APIs. Integrated Rebuy for cart and post-purchase offers, wrote Plus Scripts for the tiered discount logic the native rules could not express, and configured the payment gateways.",
+      "Moved product, variant, and inventory reads onto the Admin and Storefront GraphQL APIs, integrated Rebuy for cart and post-purchase offers, and wrote Plus Scripts for tiered discount logic the native rules could not express.",
     ],
-    tags: ["Shopify Plus", "Liquid", "GraphQL", "Scripts", "Rebuy", "SCSS"],
+    tags: ["Shopify Plus", "Liquid", "GraphQL", "Scripts", "Rebuy"],
   },
   {
     name: "INH Professional",
+    slug: "inh-professional",
     url: "https://inhprofessional.com",
     domain: "inhprofessional.com",
+    platform: "Shopify Plus",
     sector: "Pro stylist channel",
     period: "2023 — present",
-    role: "Senior Shopify Developer",
     body: [
       "The trade-facing sibling to INH Hair, running on the same theme codebase with a separate storefront, its own pricing rules, and gated access for verified stylists.",
-      "Most of the work here is keeping two stores on one theme without them quietly drifting apart — shared sections, per-store settings, and being disciplined about what gets forked and what stays common.",
+      "Most of the work is keeping two stores on one theme without them quietly drifting apart — shared sections, per-store settings, and being disciplined about what gets forked and what stays common.",
     ],
-    tags: ["Shopify Plus", "Liquid", "Multi-store", "Gated catalogue"],
+    tags: ["Multi-store", "Gated catalogue", "Liquid", "Section groups"],
+  },
+  {
+    name: "247 Pro Restoration",
+    slug: "247-pro-restoration",
+    url: "https://247prorestoration.com",
+    domain: "247prorestoration.com",
+    platform: "WordPress",
+    sector: "Emergency property restoration · Los Angeles",
+    period: "WordPress build",
+    body: [
+      "A lead-generation site for a 24/7 restoration company, where every page has one job: get someone with a flooded floor to call now.",
+      "Service pages for each type of damage, the emergency number kept in reach on every screen, certifications and reviews up front for trust, and a plain-language walkthrough of what happens in the first hour.",
+    ],
+    tags: ["WordPress", "Custom theme", "Lead gen", "Local SEO"],
+  },
+  {
+    name: "Modern Comfort Builders",
+    slug: "modern-comfort-builders",
+    url: "http://moderncomfortbuilders.com",
+    domain: "moderncomfortbuilders.com",
+    platform: "WordPress",
+    sector: "Construction & remodeling",
+    period: "WordPress build",
+    body: [
+      "A brand site for a design-build construction company, led by large project photography and a calm, editorial layout that matches the homes they build.",
+      "Service pages for new builds, ADUs, and remodels, a step-by-step process section, and galleries the team can keep adding to without touching code.",
+    ],
+    tags: ["WordPress", "Brand site", "Galleries", "Editable blocks"],
   },
 ];
 
-const SHOPIFY = [
-  { name: "INH Hair", url: "https://inhhair.com" },
-  { name: "INH Professional", url: "https://inhprofessional.com" },
-  { name: "Glamnetic", url: "https://glamnetic.com" },
-  { name: "PureCare", url: "https://www.purecare.com" },
-  { name: "Goody's Powder", url: "https://www.goodyspowder.com" },
-  { name: "Eskute", url: "https://eskute.de" },
-  { name: "Atlantic Naturals", url: "https://atlanticnaturals.com" },
-  { name: "Critter Concepts", url: "https://critterconcepts.com" },
-  { name: "DCB Worldwide", url: "https://dcbworldwide.com" },
-  { name: "Moken Vision", url: "https://mokenvision.myshopify.com" },
-  { name: "My Work Supply", url: "https://myworksupply.com" },
-  { name: "Amarala", url: "https://amarala.co" },
-  { name: "Jessica Rich", url: "https://jessicarich.com" },
-  { name: "Macklowe Gallery", url: "https://www.macklowegallery.com" },
-  { name: "Vanity Makeup", url: "https://vanitymakeup.com" },
-  { name: "Homecraft Textiles", url: "https://www.homecrafttextiles.com.au" },
-  { name: "Swallows N Daggers", url: "https://swallowsndaggers.com" },
-  { name: "Invatech Italia", url: "https://invatechitalia.com" },
-  { name: "Peace Love Hormones", url: "https://www.peacelovehormones.com" },
-  { name: "Carte Lash", url: "https://cartellash.ca" },
-  { name: "Schroder USA", url: "https://schroderusa.com" },
-  { name: "McCrystal Creations", url: "https://mccrystalcreations.com" },
-  { name: "Urban Depot", url: "https://urbandepot.com.au" },
-];
-
-const WORDPRESS = [
-  { name: "Bidi Vapor", url: "https://bidivapor.com" },
-  { name: "Kaival Labs", url: "https://kaivallabs.com" },
-  { name: "McKay Drilling", url: "https://mckaydrilling.com.au" },
-  { name: "247 Pro Restoration", url: "https://247prorestoration.com" },
-  { name: "Glowing Rooms", url: "https://www.glowingrooms.com.au" },
-  { name: "Vital Vet", url: "http://vitalvet.com.au" },
-  { name: "QRX Digital", url: "https://qrxdigital.com" },
-];
-
-function ArrowIcon() {
+function Arrow() {
   return (
-    <svg
-      width="11"
-      height="11"
-      viewBox="0 0 12 12"
-      fill="none"
-      aria-hidden
-      className="shrink-0 text-ink-3 transition-colors group-hover:text-brand"
-    >
-      <path
-        d="M3 9L9 3M9 3H4.2M9 3v4.8"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
+      <path d="M3 9L9 3M9 3H4.2M9 3v4.8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
-  );
-}
-
-function SiteList({
-  heading,
-  note,
-  sites,
-}: {
-  heading: string;
-  note: string;
-  sites: { name: string; url: string }[];
-}) {
-  return (
-    <div>
-      <div className="flex items-baseline justify-between gap-4 border-b border-line-strong pb-2">
-        <h4 className="text-[14.5px] font-semibold tracking-tight">
-          {heading}
-          <span className="ml-2 font-mono text-[12px] font-normal text-ink-3">
-            {sites.length}
-          </span>
-        </h4>
-        <span className="text-[12.5px] text-ink-3">{note}</span>
-      </div>
-
-      <ul className="mt-1 grid sm:grid-cols-2 sm:gap-x-8">
-        {sites.map((site) => (
-          <li key={site.url} className="border-b border-line">
-            <a
-              href={site.url}
-              target="_blank"
-              rel="noreferrer"
-              className="group flex items-center justify-between gap-3 py-2.5 text-[14px]"
-            >
-              <span className="transition-colors group-hover:text-brand">
-                {site.name}
-              </span>
-              <ArrowIcon />
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }
 
 export default function Work() {
   return (
-    <section id="work" className="border-b border-line bg-canvas px-6 py-20 sm:py-24">
-      <div className="mx-auto max-w-5xl">
-        <SectionHeading
-          eyebrow="Selected work"
-          title="Stores I've shipped"
-          lead="Two I can talk about in detail, and the full list underneath. Some of these I built end to end; on others I was one developer on an agency team. Ask me about any of them and I'll tell you which."
-        />
+    <section id="work" className="border-b border-line bg-paper px-6 py-20 sm:py-28">
+      <div className="mx-auto max-w-6xl">
+        <Reveal>
+          <p className="font-mono text-[12px] uppercase tracking-[0.14em] text-brand">Selected work</p>
+          <h2 className="mt-2.5 max-w-3xl font-display text-[2.1rem] font-semibold leading-[1.08] tracking-[-0.03em] sm:text-[2.9rem]">
+            Stores and sites I&apos;ve shipped
+          </h2>
+          <p className="mt-4 max-w-2xl text-[15.5px] leading-[1.65] text-ink-2">
+            Four in detail, then everything else. Hover a screenshot to scroll
+            the full page.
+          </p>
+        </Reveal>
 
-        <div className="mt-12 space-y-4">
-          {FEATURED.map((project, i) => (
-            <Reveal key={project.url} as="article" delay={i * 80}>
-              <div className="rounded-lg border border-line bg-paper p-6 sm:p-8">
-                <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-2">
-                  <div>
-                    <h3 className="text-[19px] font-semibold tracking-tight">
-                      {project.name}
-                    </h3>
-                    <p className="mt-1 text-[13.5px] text-ink-3">
-                      {project.sector} · {project.role}
-                    </p>
-                  </div>
-                  <div className="text-left sm:text-right">
-                    <a
-                      href={project.url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="group inline-flex items-center gap-1.5 text-[13.5px] text-ink-2 transition-colors hover:text-brand"
-                    >
-                      {project.domain}
-                      <ArrowIcon />
-                    </a>
-                    <p className="mt-1 font-mono text-[12px] text-ink-3">
-                      {project.period}
-                    </p>
-                  </div>
+        <div className="mt-16 space-y-24 sm:space-y-32">
+          {FEATURED.map((p, i) => (
+            <article
+              key={p.slug}
+              className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16"
+            >
+              <Reveal className={`min-w-0 ${i % 2 ? "lg:order-2" : ""}`}>
+                <a
+                  href={p.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group parallax-slow block"
+                  aria-label={`Visit ${p.domain}`}
+                >
+                  <BrowserFrame url={p.domain}>
+                    <div className="page-scroll relative h-(--frame-h) overflow-hidden [--frame-h:280px] sm:[--frame-h:400px]">
+                      <Image
+                        src={shotSrc(p.slug, true)}
+                        alt={`${p.name} — full homepage`}
+                        width={900}
+                        height={3000}
+                        sizes="(min-width: 1024px) 560px, 100vw"
+                        className="w-full"
+                      />
+                    </div>
+                  </BrowserFrame>
+                </a>
+              </Reveal>
+
+              <Reveal delay={100} className={i % 2 ? "lg:order-1" : ""}>
+                <div className="flex items-center gap-3">
+                  <span className="font-mono text-[12px] text-ink-3">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span
+                    className={`rounded-full px-2.5 py-0.5 font-mono text-[11px] font-medium ${
+                      p.platform === "WordPress"
+                        ? "bg-wp/10 text-wp"
+                        : "bg-brand-tint text-brand"
+                    }`}
+                  >
+                    {p.platform}
+                  </span>
                 </div>
-
-                <div className="mt-5 max-w-3xl space-y-3.5 text-[14.5px] leading-[1.7] text-ink-2">
-                  {project.body.map((paragraph) => (
-                    <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+                <h3 className="mt-3 font-display text-[1.9rem] font-semibold tracking-[-0.025em]">
+                  {p.name}
+                </h3>
+                <p className="mt-1 text-[13.5px] text-ink-3">
+                  {p.sector} · {p.period}
+                </p>
+                <div className="mt-5 space-y-3.5 text-[15px] leading-[1.7] text-ink-2">
+                  {p.body.map((para) => (
+                    <p key={para.slice(0, 24)}>{para}</p>
                   ))}
                 </div>
-
                 <ul className="mt-5 flex flex-wrap gap-1.5">
-                  {project.tags.map((tag) => (
-                    <li
-                      key={tag}
-                      className="rounded border border-line bg-canvas px-2 py-0.5 font-mono text-[11.5px] text-ink-3"
-                    >
+                  {p.tags.map((tag) => (
+                    <li key={tag} className="rounded-md border border-line bg-canvas px-2 py-0.5 font-mono text-[11.5px] text-ink-3">
                       {tag}
                     </li>
                   ))}
                 </ul>
-              </div>
-            </Reveal>
+                <a
+                  href={p.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group mt-6 inline-flex items-center gap-1.5 text-[14px] font-medium text-ink underline decoration-line-strong underline-offset-4 transition-colors hover:text-brand hover:decoration-brand"
+                >
+                  Visit {p.domain}
+                  <Arrow />
+                </a>
+              </Reveal>
+            </article>
           ))}
         </div>
 
-        <Reveal delay={80} className="mt-14 space-y-12">
-          <SiteList
-            heading="Shopify"
-            note="In-house and agency work"
-            sites={SHOPIFY}
-          />
-          <SiteList
-            heading="WordPress & WooCommerce"
-            note="Mostly 2018 — 2021"
-            sites={WORDPRESS}
-          />
-          <p className="text-[13px] leading-relaxed text-ink-3">
-            Live links, so a few will have been redesigned by other developers
-            since I worked on them. That is what happens to agency work.
-          </p>
-        </Reveal>
+        <Gallery />
       </div>
     </section>
   );

@@ -3,8 +3,8 @@ import SectionHeading from "./SectionHeading";
 
 const PRINCIPLES = [
   {
-    title: "I read the theme before I change it",
-    body: "Most Shopify stores I inherit have three years of other people's decisions in them. Some of those decisions are load-bearing. I spend the first day reading rather than refactoring.",
+    title: "I read the code before I change it",
+    body: "Most stores and sites I inherit have three years of other people's decisions in them. Some of those decisions are load-bearing. I spend the first day reading rather than refactoring.",
   },
   {
     title: "Sections and settings over hardcoded markup",
@@ -15,8 +15,8 @@ const PRINCIPLES = [
     body: "Work happens on a branch and goes out through a preview theme. Editing live code in the admin is how stores go down on a Friday afternoon.",
   },
   {
-    title: "Apps are a cost, not a free feature",
-    body: "Every app adds scripts to your storefront. Sometimes that trade is worth it. Often, fifteen lines of Liquid does the same job without the render-blocking bundle.",
+    title: "Apps and plugins are a cost",
+    body: "Every Shopify app or WordPress plugin adds scripts to your site. Sometimes that trade is worth it. Often, fifteen lines of Liquid or PHP does the same job without the render-blocking bundle.",
   },
   {
     title: "I'd rather tell you it's a bad idea",
@@ -26,8 +26,8 @@ const PRINCIPLES = [
 
 export default function Approach() {
   return (
-    <section className="border-b border-line px-6 py-20 sm:py-24">
-      <div className="mx-auto max-w-5xl">
+    <section className="border-b border-line bg-canvas px-6 py-20 sm:py-28">
+      <div className="mx-auto max-w-6xl">
         <SectionHeading
           eyebrow="How I work"
           title="A few things worth knowing"
@@ -44,7 +44,7 @@ export default function Approach() {
               <p className="font-mono text-[12px] text-ink-3">
                 {String(i + 1).padStart(2, "0")}
               </p>
-              <h3 className="mt-2 text-[15.5px] font-semibold tracking-tight">
+              <h3 className="mt-2 font-display text-[18px] font-semibold tracking-tight">
                 {item.title}
               </h3>
               <p className="mt-2 text-[14.5px] leading-[1.7] text-ink-2">

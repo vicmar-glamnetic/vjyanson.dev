@@ -55,56 +55,53 @@ const JOBS = [
 
 export default function Experience() {
   return (
-    <section id="experience" className="border-b border-line px-6 py-20 sm:py-24">
-      <div className="mx-auto max-w-5xl">
+    <section id="experience" className="bg-ink px-6 py-20 text-white sm:py-28">
+      <div className="mx-auto max-w-6xl">
         <SectionHeading
+          dark
           eyebrow="Experience"
-          title="Where I've worked"
-          lead="Six companies across the Philippines, Australia, and the United States. Everything from 2019 onward has had Shopify in it somewhere."
+          title="Six companies, three countries"
+          lead="PHP and WordPress first, then Shopify from 2019 onward. Remote for teams in the United States and Australia, and in-office in the Philippines."
         />
 
-        <ol className="mt-12">
+        <ol className="relative mt-14 pl-8 sm:pl-0">
+          {/* Rail grows as you scroll through the section */}
+          <span className="absolute bottom-2 left-[5px] top-2 w-px bg-white/10 sm:left-[11.5rem]" aria-hidden />
+          <span className="timeline-rail absolute bottom-2 left-[5px] top-2 w-px bg-lime sm:left-[11.5rem]" aria-hidden />
+
           {JOBS.map((job, i) => (
             <Reveal
               key={job.company}
               as="li"
               delay={Math.min(i, 3) * 60}
-              className="border-t border-line py-7 first:border-t-0 first:pt-0"
+              className="relative grid gap-x-12 gap-y-2 pb-12 last:pb-0 sm:grid-cols-[10rem_1fr]"
             >
-              <div className="grid gap-x-10 gap-y-3 sm:grid-cols-[10rem_1fr]">
-                <div className="sm:pt-0.5">
-                  <p className="font-mono text-[12px] leading-relaxed text-ink-3">
-                    {job.period}
-                  </p>
-                  {job.current && (
-                    <p className="mt-1.5 inline-flex items-center gap-1.5 text-[12px] font-medium text-brand">
-                      <span className="h-1.5 w-1.5 rounded-full bg-brand" />
-                      Current
-                    </p>
-                  )}
-                </div>
+              <span
+                className={`absolute -left-8 top-1.5 h-[11px] w-[11px] rounded-full border-2 sm:left-[calc(11.5rem-5px)] ${
+                  job.current ? "border-lime bg-lime shadow-[0_0_0_5px_rgba(149,191,71,0.2)]" : "border-white/40 bg-ink"
+                }`}
+                aria-hidden
+              />
+              <div className="sm:text-right">
+                <p className="font-mono text-[12px] leading-relaxed text-white/50">{job.period}</p>
+                {job.current && (
+                  <p className="mt-1 text-[12px] font-medium text-lime">Current</p>
+                )}
+              </div>
 
-                <div>
-                  <h3 className="text-[16.5px] font-semibold tracking-tight">
-                    {job.role}
-                  </h3>
-                  <p className="mt-0.5 text-[13.5px] text-ink-3">
-                    {job.company} · {job.location}
-                  </p>
-                  <p className="mt-3 max-w-2xl text-[14.5px] leading-[1.7] text-ink-2">
-                    {job.body}
-                  </p>
-                  <ul className="mt-4 flex flex-wrap gap-1.5">
-                    {job.tags.map((tag) => (
-                      <li
-                        key={tag}
-                        className="rounded border border-line bg-canvas px-2 py-0.5 font-mono text-[11.5px] text-ink-3"
-                      >
-                        {tag}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+              <div className="sm:pl-4">
+                <h3 className="font-display text-[19px] font-semibold tracking-tight">{job.role}</h3>
+                <p className="mt-0.5 text-[13.5px] text-white/50">
+                  {job.company} · {job.location}
+                </p>
+                <p className="mt-3 max-w-2xl text-[14.5px] leading-[1.7] text-white/75">{job.body}</p>
+                <ul className="mt-4 flex flex-wrap gap-1.5">
+                  {job.tags.map((tag) => (
+                    <li key={tag} className="rounded-md border border-white/12 bg-white/5 px-2 py-0.5 font-mono text-[11.5px] text-white/60">
+                      {tag}
+                    </li>
+                  ))}
+                </ul>
               </div>
             </Reveal>
           ))}
